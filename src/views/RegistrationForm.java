@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -25,10 +26,11 @@ public class RegistrationForm extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JButton submit;
-	private JTextField username, email;
+	private JTextField username, email, first_name, last_name, shipping_address, phone;
 	private JPasswordField password, repassword;
 	private ImageIcon imgIcon;
 	private JLabel note, image, tri;
+	private static Container content;
 
 	/**
 	 * Launch the application.
@@ -63,6 +65,8 @@ public class RegistrationForm extends JFrame {
 		setTitle("Book Store");
 		getContentPane().setBackground(Color.ORANGE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		content = getContentPane();
 
 		note = new JLabel("Sign up");
 		note.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -71,319 +75,31 @@ public class RegistrationForm extends JFrame {
 		getContentPane().add(note);
 
 		username = new JTextField("Username");
-		username.setForeground(Color.LIGHT_GRAY);
-		username.setHorizontalAlignment(SwingConstants.CENTER);
-		username.setFont(new Font("Hobo Std", Font.PLAIN, 20));
-		username.setBounds(320, 120, 300, 50);
-		username.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				if (username.getText().equals("Username")) {
-					username.setText("");
-					username.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				if (username.getText().equals("")) {
-					username.setText("Username");
-					username.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		username.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				if (username.getText().equals("")) {
-					username.setText("Username");
-					username.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if (username.getText().equals("Username")) {
-					username.setText("");
-					username.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				if (username.getText().equals("")) {
-					username.setText("Username");
-					username.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if (username.getText().equals("Username")) {
-					username.setText("");
-					username.setForeground(Color.black);
-				}
-			}
-		});
-		getContentPane().add(username);
+		initialize_text_field(username, "Username", 140, 120);
 
 		email = new JTextField("Email");
-		email.setForeground(Color.LIGHT_GRAY);
-		email.setHorizontalAlignment(SwingConstants.CENTER);
-		email.setFont(new Font("Hobo Std", Font.PLAIN, 20));
-		email.setBounds(320, 180, 300, 50);
-		email.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				if (email.getText().equals("Email")) {
-					email.setText("");
-					email.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				if (email.getText().equals("")) {
-					email.setText("Email");
-					email.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		email.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				if (email.getText().equals("")) {
-					email.setText("Email");
-					email.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if (email.getText().equals("Email")) {
-					email.setText("");
-					email.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				if (email.getText().equals("")) {
-					email.setText("Email");
-					email.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if (email.getText().equals("Email")) {
-					email.setText("");
-					email.setForeground(Color.black);
-				}
-			}
-		});
-		getContentPane().add(email);
-
+		initialize_text_field(email, "Email", 460, 120);
+		
+		first_name = new JTextField("First Name");
+		initialize_text_field(first_name, "First Name", 140, 180);
+		
+		last_name = new JTextField("Last Name");
+		initialize_text_field(last_name, "Last Name", 460, 180);
+		
+		shipping_address = new JTextField("Address");
+		initialize_text_field(shipping_address, "Address", 140, 240);
+		
+		phone = new JTextField("Phone");
+		initialize_text_field(phone, "Phone", 460, 240);
+		
 		password = new JPasswordField("Password");
-		password.setForeground(Color.LIGHT_GRAY);
-		password.setHorizontalAlignment(SwingConstants.CENTER);
-		password.setFont(new Font("Hobo Std", Font.PLAIN, 20));
-		password.setBounds(320, 240, 300, 50);
-		password.setEchoChar((char) 0);
-		password.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				tri.setText(new String(password.getPassword()));
-				if (new String(password.getPassword()).equals("Password")) {
-					password.setText("");
-					password.setEchoChar('.');
-					password.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				tri.setText(new String(password.getPassword()));
-				if (new String(password.getPassword()).equals("")) {
-					password.setText("Password");
-					password.setEchoChar((char) 0);
-					password.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-			}
-		});
-		password.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				tri.setText(new String(password.getPassword()));
-				if (new String(password.getPassword()).equals("")) {
-					password.setText("Password");
-					password.setEchoChar((char) 0);
-					password.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				tri.setText(new String(password.getPassword()));
-				if (new String(password.getPassword()).equals("Password")) {
-					password.setText("");
-					password.setEchoChar('.');
-					password.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				tri.setText(new String(password.getPassword()));
-				if (new String(password.getPassword()).equals("")) {
-					password.setText("Password");
-					password.setEchoChar((char) 0);
-					password.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				tri.setText(new String(password.getPassword()));
-				if (new String(password.getPassword()).equals("Password")) {
-					password.setText("");
-					password.setEchoChar('.');
-					password.setForeground(Color.black);
-				}
-			}
-		});
-		getContentPane().add(password);
+		initialize_password_field(password, "Password", 140, 300);
 
 		repassword = new JPasswordField("Re-type Password");
-		repassword.setForeground(Color.LIGHT_GRAY);
-		repassword.setHorizontalAlignment(SwingConstants.CENTER);
-		repassword.setFont(new Font("Hobo Std", Font.PLAIN, 20));
-		repassword.setBounds(320, 300, 300, 50);
-		repassword.setEchoChar((char) 0);
-		repassword.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				tri.setText(new String(repassword.getPassword()));
-				if (new String(repassword.getPassword()).equals("Re-type Password")) {
-					repassword.setText("");
-					repassword.setEchoChar('.');
-					repassword.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				tri.setText(new String(repassword.getPassword()));
-				if (new String(repassword.getPassword()).equals("")) {
-					repassword.setText("Re-type Password");
-					repassword.setEchoChar((char) 0);
-					repassword.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-			}
-		});
-		repassword.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				tri.setText(new String(repassword.getPassword()));
-				if (new String(repassword.getPassword()).equals("")) {
-					repassword.setText("Re-type Password");
-					repassword.setEchoChar((char) 0);
-					repassword.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				tri.setText(new String(repassword.getPassword()));
-				if (new String(repassword.getPassword()).equals("Re-type Password")) {
-					repassword.setText("");
-					repassword.setEchoChar('.');
-					repassword.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				tri.setText(new String(repassword.getPassword()));
-				if (new String(repassword.getPassword()).equals("")) {
-					repassword.setText("Re-type Password");
-					repassword.setEchoChar((char) 0);
-					repassword.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				tri.setText(new String(repassword.getPassword()));
-				if (new String(repassword.getPassword()).equals("Re-type Password")) {
-					repassword.setText("");
-					repassword.setEchoChar('.');
-					repassword.setForeground(Color.black);
-				}
-			}
-		});
-		getContentPane().add(repassword);
+		initialize_password_field(repassword, "Re-type Password", 460, 300);
 
 		submit = new JButton("Submit");
-		submit.setBounds(400, 400, 150, 50);
+		submit.setBounds(375, 400, 150, 50);
 		submit.setBackground(Color.LIGHT_GRAY);
 		submit.addActionListener(new ActionListener() {
 
@@ -402,5 +118,157 @@ public class RegistrationForm extends JFrame {
 		tri = new JLabel("");
 		tri.setBounds(300, 300, 50, 50);
 		getContentPane().add(tri);
+	}
+	
+	private static void initialize_text_field(JTextField field, String name, int x, int y){
+		field.setForeground(Color.LIGHT_GRAY);
+		field.setHorizontalAlignment(SwingConstants.CENTER);
+		field.setFont(new Font("Hobo Std", Font.PLAIN, 20));
+		field.setBounds(x, y, 300, 50);
+		field.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (field.getText().equals(name)) {
+					field.setText("");
+					field.setForeground(Color.black);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (field.getText().equals("")) {
+					field.setText(name);
+					field.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		field.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				if (field.getText().equals("")) {
+					field.setText(name);
+					field.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (field.getText().equals(name)) {
+					field.setText("");
+					field.setForeground(Color.black);
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				if (field.getText().equals("")) {
+					field.setText(name);
+					field.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (field.getText().equals(name)) {
+					field.setText("");
+					field.setForeground(Color.black);
+				}
+			}
+		});
+		content.add(field);
+	}
+	
+	private static void initialize_password_field(JPasswordField pass, String name, int x, int y){
+		pass.setForeground(Color.LIGHT_GRAY);
+		pass.setHorizontalAlignment(SwingConstants.CENTER);
+		pass.setFont(new Font("Hobo Std", Font.PLAIN, 20));
+		pass.setBounds(x, y, 300, 50);
+		pass.setEchoChar((char) 0);
+		pass.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				if (new String(pass.getPassword()).equals(name)) {
+					pass.setText("");
+					pass.setEchoChar('.');
+					pass.setForeground(Color.black);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				if (new String(pass.getPassword()).equals("")) {
+					pass.setText(name);
+					pass.setEchoChar((char) 0);
+					pass.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+		});
+		pass.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				if (new String(pass.getPassword()).equals("")) {
+					pass.setText(name);
+					pass.setEchoChar((char) 0);
+					pass.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (new String(pass.getPassword()).equals(name)) {
+					pass.setText("");
+					pass.setEchoChar('.');
+					pass.setForeground(Color.black);
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				if (new String(pass.getPassword()).equals("")) {
+					pass.setText(name);
+					pass.setEchoChar((char) 0);
+					pass.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (new String(pass.getPassword()).equals(name)) {
+					pass.setText("");
+					pass.setEchoChar('.');
+					pass.setForeground(Color.black);
+				}
+			}
+		});
+		content.add(pass);
 	}
 }
