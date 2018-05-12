@@ -25,7 +25,7 @@ public class NewBook extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JButton submit, cancel;
-	private JTextField isbn, title, authors, publisher, publication_year, selling_price, category;
+	private JTextField isbn, title, authors, publisher, publication_year, selling_price, category, threshold, quantity;
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
@@ -78,8 +78,8 @@ public class NewBook extends JFrame {
 		title = new JTextField("Title");
 		initialize_text_field(title, "Email", 460, 120);
 
-		authors = new JTextField("Author1, Author2, ...");
-		initialize_text_field(authors, "Author1, Author2, ...", 140, 180);
+		authors = new JTextField("Author1 - Author2 - ...");
+		initialize_text_field(authors, "Author1 - Author2 - ...", 140, 180);
 
 		publisher = new JTextField("Publisher");
 		initialize_text_field(publisher, "Publisher", 460, 180);
@@ -89,12 +89,18 @@ public class NewBook extends JFrame {
 
 		publication_year = new JTextField("Publication Year");
 		initialize_text_field(publication_year, "Publication Year", 460, 240);
+		
+		threshold = new JTextField("Minimum Quantity");
+		initialize_text_field(threshold, "Minimum Quantity", 140, 300);
+		
+		quantity = new JTextField("Current Quantity");
+		initialize_text_field(quantity, "Current Quantity", 460, 300);
 
 		category = new JTextField("Category");
-		initialize_text_field(category, "Category", 300, 300);
+		initialize_text_field(category, "Category", 300, 360);
 
 		submit = new JButton("Submit");
-		initialize_button(submit, "Submit", 290, 400);
+		initialize_button(submit, "Submit", 290, 460);
 		submit.addActionListener(new ActionListener() {
 
 			@Override
@@ -104,7 +110,7 @@ public class NewBook extends JFrame {
 		});
 
 		cancel = new JButton("Cancel");
-		initialize_button(cancel, "Cancel", 460, 400);
+		initialize_button(cancel, "Cancel", 460, 460);
 		cancel.addActionListener(new ActionListener() {
 
 			@Override
