@@ -1,4 +1,5 @@
 -- MySQL Workbench Forward Engineering
+
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
@@ -91,6 +92,48 @@ CREATE TABLE IF NOT EXISTS `BOOK_STORE`.`orders` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `BOOK_STORE`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `BOOK_STORE`.`user` (
+  `user name` VARCHAR(40) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `phone_number` VARCHAR(45) NOT NULL,
+  `shipping_address` VARCHAR(45) NOT NULL,
+  `privilege` VARCHAR(45) NOT NULL,
+  UNIQUE INDEX `user name_UNIQUE` (`user name` ASC),
+  PRIMARY KEY (`email`),
+  UNIQUE INDEX `phoneNumber_UNIQUE` (`phone_number` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `BOOK_STORE`.`cart`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `BOOK_STORE`.`cart` (
+  `email` VARCHAR(45) NOT NULL,
+  `ISBN` VARCHAR(50) NOT NULL,
+  `quantity` INT NOT NULL,
+  PRIMARY KEY (`email`, `ISBN`),
+  INDEX `cart-bookfk_idx` (`ISBN` ASC),
+  CONSTRAINT `cart-emailfk`
+    FOREIGN KEY (`email`)
+    REFERENCES `BOOK_STORE`.`user` (`email`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cart-bookfk`
+    FOREIGN KEY (`ISBN`)
+    REFERENCES `BOOK_STORE`.`book` (`ISBN`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+USE `BOOK_STORE`;
+
 DELIMITER $$
 USE `BOOK_STORE`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `BOOK_STORE`.`quantity_table_BEFORE_UPDATE` BEFORE UPDATE ON `quantity_table` FOR EACH ROW
@@ -101,6 +144,7 @@ BEGIN
 	END IF;
 END$$
 
+USE `BOOK_STORE`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `BOOK_STORE`.`quantity_table_AFTER_UPDATE` AFTER UPDATE ON `quantity_table` FOR EACH ROW
 BEGIN
 	IF NEW.quantity < NEW.threshold THEN
@@ -115,6 +159,7 @@ BEGIN
     END IF;
 END$$
 
+USE `BOOK_STORE`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `BOOK_STORE`.`orders_BEFORE_DELETE` BEFORE DELETE ON `orders` FOR EACH ROW
 BEGIN
 	UPDATE quantity_table SET quantity = OLD.amount + quantity WHERE OLD.ISBN = quantity_table.ISBN;
