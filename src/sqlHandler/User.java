@@ -10,7 +10,7 @@ public class User {
 	{
 		return "";
 	}
-	String getUsers(String userName,String Password,String email,String firstName, String LastName,String phone,String address,int privilege)
+	String getUsers(String userName,String  Password,String email,String firstName, String LastName,String phone,String address,int privilege)
 	{
 		return "";
 	}
