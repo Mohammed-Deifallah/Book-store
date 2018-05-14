@@ -2,6 +2,7 @@ package views;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -180,6 +181,7 @@ public class EditBook extends JFrame {
 		button.setBounds(x, y, 150, 50);
 		button.setBackground(Color.LIGHT_GRAY);
 		button.setFont(new Font("Hobo Std", Font.BOLD, 15));
+		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		content.add(button);
 	}
 

@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.Color;
+import java.awt.Cursor;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
@@ -66,6 +68,7 @@ public class Welcome extends JFrame {
 		signUp.setFont(new Font("Tahoma", Font.BOLD, 14));
 		signUp.setForeground(Color.BLACK);
 		signUp.setBackground(Color.GREEN);
+		signUp.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		signUp.setBounds(191, 200, 269, 39);
 		getContentPane().add(signUp);
 
@@ -75,6 +78,7 @@ public class Welcome extends JFrame {
 		btnSignIn.setFocusPainted(false);
 		btnSignIn.setContentAreaFilled(false);
 		btnSignIn.setBounds(371, 250, 89, 23);
+		btnSignIn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		Map attributes = btnSignIn.getFont().getAttributes();
 		attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 		btnSignIn.setFont(btnSignIn.getFont().deriveFont(attributes));

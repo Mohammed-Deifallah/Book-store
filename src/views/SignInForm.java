@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,7 @@ public class SignInForm extends JFrame {
 	private JTextField username;
 	private JPasswordField password;
 	private ImageIcon imgIcon;
-	private JLabel note, image, tri;
+	private JLabel note, image;
 
 	/**
 	 * Launch the application.
@@ -154,7 +155,6 @@ public class SignInForm extends JFrame {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-				tri.setText(new String(password.getPassword()));
 				if (new String(password.getPassword()).equals("Password")) {
 					password.setText("");
 					password.setEchoChar('.');
@@ -165,7 +165,6 @@ public class SignInForm extends JFrame {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-				tri.setText(new String(password.getPassword()));
 				if (new String(password.getPassword()).equals("")) {
 					password.setText("Password");
 					password.setEchoChar((char) 0);
@@ -182,7 +181,6 @@ public class SignInForm extends JFrame {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				tri.setText(new String(password.getPassword()));
 				if (new String(password.getPassword()).equals("")) {
 					password.setText("Password");
 					password.setEchoChar((char) 0);
@@ -192,7 +190,6 @@ public class SignInForm extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				tri.setText(new String(password.getPassword()));
 				if (new String(password.getPassword()).equals("Password")) {
 					password.setText("");
 					password.setEchoChar('.');
@@ -202,7 +199,6 @@ public class SignInForm extends JFrame {
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				tri.setText(new String(password.getPassword()));
 				if (new String(password.getPassword()).equals("")) {
 					password.setText("Password");
 					password.setEchoChar((char) 0);
@@ -217,7 +213,6 @@ public class SignInForm extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				tri.setText(new String(password.getPassword()));
 				if (new String(password.getPassword()).equals("Password")) {
 					password.setText("");
 					password.setEchoChar('.');
@@ -230,6 +225,7 @@ public class SignInForm extends JFrame {
 		submit = new JButton("Submit");
 		submit.setBounds(400, 400, 150, 50);
 		submit.setBackground(Color.LIGHT_GRAY);
+		submit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		submit.addActionListener(new ActionListener() {
 
 			@Override
@@ -243,9 +239,5 @@ public class SignInForm extends JFrame {
 		image = new JLabel(imgIcon);
 		image.setBounds(850, 250, imgIcon.getIconWidth(), imgIcon.getIconHeight());
 		getContentPane().add(image);
-
-		tri = new JLabel("");
-		tri.setBounds(300, 300, 50, 50);
-		getContentPane().add(tri);
 	}
 }

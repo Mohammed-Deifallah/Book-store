@@ -2,6 +2,7 @@ package views;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -101,6 +102,7 @@ public class RegistrationForm extends JFrame {
 		submit = new JButton("Submit");
 		submit.setBounds(375, 400, 150, 50);
 		submit.setBackground(Color.LIGHT_GRAY);
+		submit.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		submit.addActionListener(new ActionListener() {
 
 			@Override

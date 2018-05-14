@@ -2,6 +2,7 @@ package views;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -97,14 +98,15 @@ public class SearchBook extends JFrame {
 		note.setBounds(50, 0, 700, 50);
 		note.setForeground(Color.BLACK);
 		getContentPane().add(note);
-		
+
 		res = new JLabel("Result: ");
 		res.setBounds(10, 50, 60, 20);
 		content.add(res);
-		
+
 		result = new JTextArea();
 		result.setEditable(false);
-		scroll = new JScrollPane(result, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll = new JScrollPane(result, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setBounds(10, 70, 200, 400);
 		content.add(scroll);
 
@@ -117,7 +119,7 @@ public class SearchBook extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 			}
 		});
 
@@ -211,11 +213,12 @@ public class SearchBook extends JFrame {
 		button.setBounds(x, y, 150, 50);
 		button.setBackground(Color.LIGHT_GRAY);
 		button.setFont(new Font("Hobo Std", Font.BOLD, 15));
+		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		content.add(button);
 	}
 
 	private void change_hint(String key) {
-		//initialize_text_field(search, key, 300, 120);
+		// initialize_text_field(search, key, 300, 120);
 		content.remove(search);
 		search = new JTextField(key);
 		initialize_text_field(search, key, 300, 120);
