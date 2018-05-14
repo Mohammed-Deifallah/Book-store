@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -13,23 +15,28 @@ import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class NewBook extends JFrame {
+public class SearchBook extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JButton submit, cancel;
-	private JTextField isbn, title, publisher, publication_year, selling_price, category, threshold, quantity;
-	private JTextArea authors;
+	private JTextField search;
+	private JTextArea result;
 	private ImageIcon imgIcon;
-	private JLabel note, image;
+	private JScrollPane scroll;
+	private JLabel note, image, key, res;
+	private JComboBox<String> list;
+	private final String options[] = { "ISBN", "Title", "Category", "Author", "Publisher" };
 	private static Container content;
 
 	/**
@@ -39,7 +46,7 @@ public class NewBook extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NewBook window = new NewBook();
+					SearchBook window = new SearchBook();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,7 +58,7 @@ public class NewBook extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public NewBook() {
+	public SearchBook() {
 		initialize();
 	}
 
@@ -68,51 +75,54 @@ public class NewBook extends JFrame {
 
 		content = getContentPane();
 
-		note = new JLabel("Add a new book");
+		key = new JLabel("Search Key: ");
+		key.setBounds(620, 10, 100, 20);
+		content.add(key);
+
+		list = new JComboBox<>(options);
+		list.setBounds(700, 10, 100, 20);
+		list.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					change_hint(options[list.getSelectedIndex()]);
+				}
+			}
+		});
+		content.add(list);
+
+		note = new JLabel("Search for a book");
 		note.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		note.setBounds(50, 0, 700, 50);
 		note.setForeground(Color.BLACK);
 		getContentPane().add(note);
+		
+		res = new JLabel("Result: ");
+		res.setBounds(10, 50, 60, 20);
+		content.add(res);
+		
+		result = new JTextArea();
+		result.setEditable(false);
+		scroll = new JScrollPane(result, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setBounds(10, 70, 200, 400);
+		content.add(scroll);
 
-		isbn = new JTextField("ISBN");
-		initialize_text_field(isbn, "ISBN", 140, 120);
-
-		title = new JTextField("Title");
-		initialize_text_field(title, "Title", 460, 120);
-
-		category = new JTextField("Category");
-		initialize_text_field(category, "Category", 140, 180);
-
-		publisher = new JTextField("Publisher");
-		initialize_text_field(publisher, "Publisher", 460, 180);
-
-		selling_price = new JTextField("Price");
-		initialize_text_field(selling_price, "Price", 140, 240);
-
-		publication_year = new JTextField("Publication Year");
-		initialize_text_field(publication_year, "Publication Year", 460, 240);
-
-		threshold = new JTextField("Minimum Quantity");
-		initialize_text_field(threshold, "Minimum Quantity", 140, 300);
-
-		quantity = new JTextField("Current Quantity");
-		initialize_text_field(quantity, "Current Quantity", 460, 300);
-
-		authors = new JTextArea("Author1\nAuthor2\n...");
-		initialize_text_area(authors, "Author1\nAuthor2\n...", 300, 360);
+		search = new JTextField("ISBN");
+		initialize_text_field(search, "ISBN", 300, 120);
 
 		submit = new JButton("Submit");
-		initialize_button(submit, "Submit", 290, 550);
+		initialize_button(submit, "Submit", 290, 240);
 		submit.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				
 			}
 		});
 
 		cancel = new JButton("Cancel");
-		initialize_button(cancel, "Cancel", 460, 550);
+		initialize_button(cancel, "Cancel", 460, 240);
 		cancel.addActionListener(new ActionListener() {
 
 			@Override
@@ -204,72 +214,10 @@ public class NewBook extends JFrame {
 		content.add(button);
 	}
 
-	private static void initialize_text_area(JTextArea field, String name, int x, int y) {
-		field.setForeground(Color.LIGHT_GRAY);
-		field.setFont(new Font("Hobo Std", Font.PLAIN, 20));
-		field.setBounds(x, y, 300, 170);
-		field.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (field.getText().equals("")) {
-					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-			}
-		});
-		field.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				if (field.getText().equals("")) {
-					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				if (field.getText().equals("")) {
-					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
-			}
-		});
-		content.add(field);
+	private void change_hint(String key) {
+		//initialize_text_field(search, key, 300, 120);
+		content.remove(search);
+		search = new JTextField(key);
+		initialize_text_field(search, key, 300, 120);
 	}
 }

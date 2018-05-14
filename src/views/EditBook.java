@@ -6,10 +6,9 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,7 +18,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class NewBook extends JFrame {
+import info.Book;
+
+public class EditBook extends JFrame {
 
 	/**
 	 * 
@@ -31,6 +32,7 @@ public class NewBook extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
+	private Book book;
 
 	/**
 	 * Launch the application.
@@ -39,7 +41,11 @@ public class NewBook extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NewBook window = new NewBook();
+					ArrayList<String> a = new ArrayList<>();
+					a.add("Taha");
+					a.add("Omar");
+					Book b = new Book("isbn", "publisher", "title", "category", 2018, 5, 7, (float) 2.25, a);
+					EditBook window = new EditBook(b);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,7 +57,8 @@ public class NewBook extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public NewBook() {
+	public EditBook(Book book) {
+		this.book = book;
 		initialize();
 	}
 
@@ -68,38 +75,38 @@ public class NewBook extends JFrame {
 
 		content = getContentPane();
 
-		note = new JLabel("Add a new book");
+		note = new JLabel("Modify Book: \"" + book.getTitle() + "\", ISBN: " + book.getISBN());
 		note.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		note.setBounds(50, 0, 700, 50);
 		note.setForeground(Color.BLACK);
 		getContentPane().add(note);
 
-		isbn = new JTextField("ISBN");
-		initialize_text_field(isbn, "ISBN", 140, 120);
+		isbn = new JTextField("ISBN: " + book.getISBN());
+		initialize_text_field(isbn, "ISBN: " + book.getISBN(), 140, 120);
 
-		title = new JTextField("Title");
-		initialize_text_field(title, "Title", 460, 120);
+		title = new JTextField("Title: " + book.getTitle());
+		initialize_text_field(title, "Title: " + book.getTitle(), 460, 120);
 
-		category = new JTextField("Category");
-		initialize_text_field(category, "Category", 140, 180);
+		category = new JTextField("Category: " + book.getCategory());
+		initialize_text_field(category, "Category: " + book.getCategory(), 140, 180);
 
-		publisher = new JTextField("Publisher");
-		initialize_text_field(publisher, "Publisher", 460, 180);
+		publisher = new JTextField("Publisher: " + book.getPublisher());
+		initialize_text_field(publisher, "Publisher: " + book.getPublisher(), 460, 180);
 
-		selling_price = new JTextField("Price");
-		initialize_text_field(selling_price, "Price", 140, 240);
+		selling_price = new JTextField("Price: " + book.getPrice());
+		initialize_text_field(selling_price, "Price: " + book.getPrice(), 140, 240);
 
-		publication_year = new JTextField("Publication Year");
-		initialize_text_field(publication_year, "Publication Year", 460, 240);
+		publication_year = new JTextField("Publication Year: " + book.getYear());
+		initialize_text_field(publication_year, "Publication Year: " + book.getYear(), 460, 240);
 
-		threshold = new JTextField("Minimum Quantity");
-		initialize_text_field(threshold, "Minimum Quantity", 140, 300);
+		threshold = new JTextField("Minimum Quantity: " + book.getThreshold());
+		initialize_text_field(threshold, "Minimum Quantity: " + book.getThreshold(), 140, 300);
 
-		quantity = new JTextField("Current Quantity");
-		initialize_text_field(quantity, "Current Quantity", 460, 300);
+		quantity = new JTextField("Current Quantity: " + book.getQuantity());
+		initialize_text_field(quantity, "Current Quantity: " + book.getQuantity(), 460, 300);
 
-		authors = new JTextArea("Author1\nAuthor2\n...");
-		initialize_text_area(authors, "Author1\nAuthor2\n...", 300, 360);
+		authors = new JTextArea("Authors:\n" + getAuthors());
+		initialize_text_area(authors, "Authors:\n" + getAuthors(), 300, 360);
 
 		submit = new JButton("Submit");
 		initialize_button(submit, "Submit", 290, 550);
@@ -128,56 +135,31 @@ public class NewBook extends JFrame {
 	}
 
 	private static void initialize_text_field(JTextField field, String name, int x, int y) {
-		field.setForeground(Color.LIGHT_GRAY);
+		// field.setForeground(Color.LIGHT_GRAY);
+		String prefix = name.substring(0, name.indexOf(':'));
 		field.setHorizontalAlignment(SwingConstants.CENTER);
 		field.setFont(new Font("Hobo Std", Font.PLAIN, 20));
 		field.setBounds(x, y, 300, 50);
-		field.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (field.getText().equals("")) {
-					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-			}
-		});
 		field.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				if (field.getText().equals("")) {
+				if (field.getText().length() < prefix.length()) {
 					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
+					// field.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				if (field.getText().equals("")) {
+				if (field.getText().length() < prefix.length()) {
 					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
+					// field.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 
@@ -188,10 +170,7 @@ public class NewBook extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
+
 			}
 		});
 		content.add(field);
@@ -205,55 +184,30 @@ public class NewBook extends JFrame {
 	}
 
 	private static void initialize_text_area(JTextArea field, String name, int x, int y) {
-		field.setForeground(Color.LIGHT_GRAY);
+		// field.setForeground(Color.LIGHT_GRAY);
+		String prefix = name.substring(0, name.indexOf('\n'));
 		field.setFont(new Font("Hobo Std", Font.PLAIN, 20));
 		field.setBounds(x, y, 300, 170);
-		field.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (field.getText().equals("")) {
-					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-			}
-		});
 		field.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				if (field.getText().equals("")) {
+				if (field.getText().length() < prefix.length()) {
 					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
+					// field.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				if (field.getText().equals("")) {
+				if (field.getText().length() < prefix.length()) {
 					field.setText(name);
-					field.setForeground(Color.LIGHT_GRAY);
+					// field.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 
@@ -264,12 +218,17 @@ public class NewBook extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (field.getText().equals(name)) {
-					field.setText("");
-					field.setForeground(Color.black);
-				}
+
 			}
 		});
 		content.add(field);
+	}
+
+	private String getAuthors() {
+		String s = "";
+		for (int i = 0; i < book.getAuthors().size(); i++) {
+			s += book.getAuthors().get(i) + '\n';
+		}
+		return s;
 	}
 }
