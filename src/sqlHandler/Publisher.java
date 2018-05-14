@@ -2,5 +2,8 @@ package sqlHandler;
 
 public class Publisher {
 
-	String addPublisher()
+	String addPublisher( ){
+		
+		return "";
+	}
 }
