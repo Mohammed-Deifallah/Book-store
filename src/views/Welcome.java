@@ -6,6 +6,9 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.font.TextAttribute;
+import java.util.Map;
+
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -46,6 +49,7 @@ public class Welcome extends JFrame {
 	/**
 	 * Initialize the contents of the
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void initialize() {
 		getContentPane().setBackground(Color.ORANGE);
 		// setBounds(100, 100, 450, 300);
@@ -71,6 +75,9 @@ public class Welcome extends JFrame {
 		btnSignIn.setFocusPainted(false);
 		btnSignIn.setContentAreaFilled(false);
 		btnSignIn.setBounds(371, 250, 89, 23);
+		Map attributes = btnSignIn.getFont().getAttributes();
+		attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+		btnSignIn.setFont(btnSignIn.getFont().deriveFont(attributes));
 
 		getContentPane().add(btnSignIn);
 
