@@ -6,9 +6,13 @@ public class Cart {
 		
 		return "";
 	}
-	String addedit(String email, String ISBN,int quantity){
+	String editCart(String email, String ISBN,int quantity){
 		
 		return "";
+	}
+	String[][] getCart(String email, String ISBN,int quantity){
+		
+		return null;
 	}
 	String remove(String email, String ISBN){
 		

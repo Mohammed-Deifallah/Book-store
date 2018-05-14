@@ -11,4 +11,8 @@ public class Author {
 	String editAuthor(String isbn,String authorName){
 		return "";
 	}
+	String[][] getAuthors(String isbn,String authorName){
+		return null;
+	}
+	
 }

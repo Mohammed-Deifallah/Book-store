@@ -10,5 +10,9 @@ public class Order {
 		
 		return "";
 	}
+	String[][] getOrder(String isbn,int quantity){
+		
+		return null;
+	}
 	
 }

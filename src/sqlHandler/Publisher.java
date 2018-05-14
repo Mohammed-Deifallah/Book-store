@@ -6,4 +6,8 @@ public class Publisher {
 		
 		return "";
 	}
+	String[][] getPublisher(String name,String address,String telephone ){
+		
+		return null;
+	}
 }

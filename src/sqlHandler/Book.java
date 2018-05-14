@@ -14,4 +14,14 @@ public class Book {
 		
 		return "";
 	}
+	String[][] getBooks(String isbn,String title,String publisher , String category, String pyear){
+		
+		
+		return null;
+	}
+	String[][] searchBooks(String isbn,String title,String publisher , String category, String pyear){
+		
+		
+		return null;
+	}
 }

@@ -13,5 +13,11 @@ public class Quantity {
 		return "";
 		
 	}
+	String[][] getQuantity(String isbn,int threshold,int quantity,int price){
+		
+		return null;
+		
+	}
+	
 	
 }

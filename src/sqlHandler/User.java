@@ -6,7 +6,11 @@ public class User {
 	{
 		return "";
 	}
-	String edit(String userName,String Password,String email,String firstName, String LastName,String phone,String address,int privilege)
+	String editUsers(String userName,String Password,String email,String firstName, String LastName,String phone,String address,int privilege)
+	{
+		return "";
+	}
+	String getUsers(String userName,String Password,String email,String firstName, String LastName,String phone,String address,int privilege)
 	{
 		return "";
 	}
