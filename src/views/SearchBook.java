@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 public class SearchBook extends JFrame {
@@ -45,6 +46,7 @@ public class SearchBook extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					SearchBook window = new SearchBook();
@@ -105,8 +107,8 @@ public class SearchBook extends JFrame {
 
 		result = new JTextArea();
 		result.setEditable(false);
-		scroll = new JScrollPane(result, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll = new JScrollPane(result, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setBounds(10, 70, 200, 400);
 		content.add(scroll);
 

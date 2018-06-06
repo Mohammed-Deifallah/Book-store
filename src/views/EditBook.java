@@ -40,6 +40,7 @@ public class EditBook extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					ArrayList<String> a = new ArrayList<>();

@@ -38,6 +38,7 @@ public class RegistrationForm extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					RegistrationForm window = new RegistrationForm();

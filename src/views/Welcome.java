@@ -30,6 +30,7 @@ public class Welcome extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Welcome window = new Welcome();
