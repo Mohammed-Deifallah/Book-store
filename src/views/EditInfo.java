@@ -7,33 +7,34 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import info.Book;
+import info.User;
 
-public class EditBook extends JFrame {
+public class EditInfo extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JButton submit, cancel, logout;
-	private JTextField isbn, title, publisher, publication_year, selling_price, category, threshold, quantity;
-	private JTextArea authors;
+	private JTextField username, email, phone, address, firstName, lastName;
+	private JPasswordField password, repassword;
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-	private Book book;
+	private User user;
 
 	/**
 	 * Launch the application.
@@ -43,11 +44,8 @@ public class EditBook extends JFrame {
 			@Override
 			public void run() {
 				try {
-					ArrayList<String> a = new ArrayList<>();
-					a.add("Taha");
-					a.add("Omar");
-					Book b = new Book("isbn", "publisher", "title", "category", 2018, 5, 7, (float) 2.25, a);
-					EditBook window = new EditBook(b);
+					User u = new User("Mohammed", "@yahoo", "00000", "Mo", "Salah", "+20", "21");
+					EditInfo window = new EditInfo(u);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,8 +57,8 @@ public class EditBook extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public EditBook(Book book) {
-		this.book = book;
+	public EditInfo(User user) {
+		this.user = user;
 		initialize();
 	}
 
@@ -77,38 +75,35 @@ public class EditBook extends JFrame {
 
 		content = getContentPane();
 
-		note = new JLabel("Modify Book: \"" + book.getTitle() + "\", ISBN: " + book.getISBN());
+		note = new JLabel("Modify User");
 		note.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		note.setBounds(50, 0, 700, 50);
 		note.setForeground(Color.BLACK);
 		getContentPane().add(note);
 
-		isbn = new JTextField("ISBN: " + book.getISBN());
-		initialize_text_field(isbn, "ISBN: " + book.getISBN(), 140, 120);
+		username = new JTextField("Username: " + user.getUserName());
+		initialize_text_field(username, "Username: " + user.getUserName(), 140, 120);
 
-		title = new JTextField("Title: " + book.getTitle());
-		initialize_text_field(title, "Title: " + book.getTitle(), 460, 120);
+		email = new JTextField("Email: " + user.getEmail());
+		initialize_text_field(email, "Email: " + user.getEmail(), 460, 120);
 
-		category = new JTextField("Category: " + book.getCategory());
-		initialize_text_field(category, "Category: " + book.getCategory(), 140, 180);
+		firstName = new JTextField("First Name: " + user.getFirstName());
+		initialize_text_field(firstName, "First Name: " + user.getFirstName(), 460, 120);
 
-		publisher = new JTextField("Publisher: " + book.getPublisher());
-		initialize_text_field(publisher, "Publisher: " + book.getPublisher(), 460, 180);
+		lastName = new JTextField("Last Name: " + user.getLastName());
+		initialize_text_field(lastName, "Last Name: " + user.getLastName(), 460, 120);
 
-		selling_price = new JTextField("Price: " + book.getPrice());
-		initialize_text_field(selling_price, "Price: " + book.getPrice(), 140, 240);
+		password = new JPasswordField("Password");
+		initialize_password_field(password, "Password", 140, 180);
 
-		publication_year = new JTextField("Publication Year: " + book.getYear());
-		initialize_text_field(publication_year, "Publication Year: " + book.getYear(), 460, 240);
+		repassword = new JPasswordField("Re-type Password");
+		initialize_password_field(repassword, "Re-type Password", 460, 180);
 
-		threshold = new JTextField("Minimum Quantity: " + book.getThreshold());
-		initialize_text_field(threshold, "Minimum Quantity: " + book.getThreshold(), 140, 300);
+		phone = new JTextField("Phone: " + user.getPhone());
+		initialize_text_field(phone, "Price: " + "Phone: " + user.getPhone(), 140, 240);
 
-		quantity = new JTextField("Current Quantity: " + book.getQuantity());
-		initialize_text_field(quantity, "Current Quantity: " + book.getQuantity(), 460, 300);
-
-		authors = new JTextArea("Authors:\n" + getAuthors());
-		initialize_text_area(authors, "Authors:\n" + getAuthors(), 300, 360);
+		address = new JTextField("Shipping Address: " + user.getAddress());
+		initialize_text_field(address, "Shipping Address: " + user.getAddress(), 460, 240);
 
 		submit = new JButton("Submit");
 		initialize_button(submit, "Submit", 290, 550);
@@ -195,32 +190,66 @@ public class EditBook extends JFrame {
 		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		content.add(button);
 	}
+	
+	private static void initialize_password_field(JPasswordField pass, String name, int x, int y){
+		pass.setForeground(Color.LIGHT_GRAY);
+		pass.setHorizontalAlignment(SwingConstants.CENTER);
+		pass.setFont(new Font("Hobo Std", Font.PLAIN, 20));
+		pass.setBounds(x, y, 300, 50);
+		pass.setEchoChar((char) 0);
+		pass.addKeyListener(new KeyListener() {
 
-	private static void initialize_text_area(JTextArea field, String name, int x, int y) {
-		// field.setForeground(Color.LIGHT_GRAY);
-		String prefix = name.substring(0, name.indexOf('\n'));
-		field.setFont(new Font("Hobo Std", Font.PLAIN, 20));
-		field.setBounds(x, y, 300, 170);
-		field.addMouseListener(new MouseListener() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				if (new String(pass.getPassword()).equals(name)) {
+					pass.setText("");
+					pass.setEchoChar('.');
+					pass.setForeground(Color.black);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				if (new String(pass.getPassword()).equals("")) {
+					pass.setText(name);
+					pass.setEchoChar((char) 0);
+					pass.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+		});
+		pass.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				if (field.getText().length() < prefix.length()) {
-					field.setText(name);
-					// field.setForeground(Color.LIGHT_GRAY);
+				if (new String(pass.getPassword()).equals("")) {
+					pass.setText(name);
+					pass.setEchoChar((char) 0);
+					pass.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-
+				if (new String(pass.getPassword()).equals(name)) {
+					pass.setText("");
+					pass.setEchoChar('.');
+					pass.setForeground(Color.black);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				if (field.getText().length() < prefix.length()) {
-					field.setText(name);
-					// field.setForeground(Color.LIGHT_GRAY);
+				if (new String(pass.getPassword()).equals("")) {
+					pass.setText(name);
+					pass.setEchoChar((char) 0);
+					pass.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 
@@ -231,17 +260,14 @@ public class EditBook extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-
+				if (new String(pass.getPassword()).equals(name)) {
+					pass.setText("");
+					pass.setEchoChar('.');
+					pass.setForeground(Color.black);
+				}
 			}
 		});
-		content.add(field);
+		content.add(pass);
 	}
 
-	private String getAuthors() {
-		String s = "";
-		for (int i = 0; i < book.getAuthors().size(); i++) {
-			s += book.getAuthors().get(i) + '\n';
-		}
-		return s;
-	}
 }

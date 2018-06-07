@@ -25,7 +25,7 @@ public class Order extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton submit, cancel;
+	private JButton submit, cancel, logout;
 	private JTextField isbn, title, quantity, publisher;
 	private ImageIcon imgIcon;
 	private JLabel note, image;
@@ -99,6 +99,16 @@ public class Order extends JFrame {
 		cancel = new JButton("Cancel");
 		initialize_button(cancel, "Cancel", 460, 240);
 		cancel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+			}
+		});
+		
+		logout = new JButton("Logout");
+		initialize_button(logout, "Logout", 1000, 10);
+		logout.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
