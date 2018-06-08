@@ -25,7 +25,7 @@ public class Jasper {
 	}
 
 	public void printTotalSales() throws JRException, SQLException {
-		jr = JasperCompileManager.compileReport("Phonebook.jrxml");
+		jr = JasperCompileManager.compileReport("TotalSales.jrxml");
 		dataSource = new JRResultSetDataSource(ex.totalSalesBooks());
 		jp = JasperFillManager.fillReport(jr, new HashMap<String, Object>(), dataSource);
 		JasperViewer.viewReport(jp);
