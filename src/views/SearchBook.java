@@ -14,16 +14,17 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 public class SearchBook extends JFrame {
 
@@ -33,10 +34,10 @@ public class SearchBook extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JButton submit, cancel, logout;
 	private JTextField search;
-	private JTextArea result;
-	private ImageIcon imgIcon;
+	private String[] columnNames;
+	private JLabel note, key;
+	private JTable results;
 	private JScrollPane scroll;
-	private JLabel note, image, key, res;
 	private JComboBox<String> list;
 	private final String options[] = { "ISBN", "Title", "Category", "Author", "Publisher" };
 	private static Container content;
@@ -101,32 +102,36 @@ public class SearchBook extends JFrame {
 		note.setForeground(Color.BLACK);
 		getContentPane().add(note);
 
-		res = new JLabel("Result: ");
-		res.setBounds(10, 50, 60, 20);
-		content.add(res);
-
-		result = new JTextArea();
-		result.setEditable(false);
-		scroll = new JScrollPane(result, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scroll.setBounds(10, 70, 200, 400);
-		content.add(scroll);
-
 		search = new JTextField("ISBN");
-		initialize_text_field(search, "ISBN", 300, 120);
+		initialize_text_field(search, "ISBN", 50, 120);
 
 		submit = new JButton("Submit");
-		initialize_button(submit, "Submit", 290, 240);
+		initialize_button(submit, "Submit", 50, 240);
 		submit.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				/*
+				 * try { Class.forName("com.mysql.jdbc.Driver"); Connection con
+				 * = DriverManager.getConnection(
+				 * "jdbc:mysql://localhost:3306/PHONEBOOK", "root", "admin");
+				 * DefaultTableModel model = new DefaultTableModel( new String[]
+				 * { "ID", "NAME", "BIRTH_DATE", "ADDRESS" }, 0); ResultSet rs =
+				 * con.createStatement().executeQuery(
+				 * "SELECT ID, PNAME, DOB, PADDRESS FROM PERSON"); while
+				 * (rs.next()) { String d = rs.getString("ID"); String e =
+				 * rs.getString("PNAME"); String f = rs.getString("DOB"); String
+				 * q = rs.getString("PADDRESS"); model.addRow(new Object[] { d,
+				 * e, f, q }); } results.setModel(model); } catch (Exception e)
+				 * {
+				 * 
+				 * }
+				 */
 			}
 		});
 
 		cancel = new JButton("Cancel");
-		initialize_button(cancel, "Cancel", 460, 240);
+		initialize_button(cancel, "Cancel", 210, 240);
 		cancel.addActionListener(new ActionListener() {
 
 			@Override
@@ -134,7 +139,33 @@ public class SearchBook extends JFrame {
 
 			}
 		});
-		
+
+		columnNames = new String[] { "ISBN", "Title", "Publisher", "Author", "Price", "Year", "Category" };
+		results = new JTable(new Object[][] {}, columnNames);
+		results.getColumnModel().getColumn(0).setPreferredWidth(40);
+		// results.getColumnModel().getColumn(4).setPreferredWidth(40);
+		// results.getColumnModel().getColumn(5).setPreferredWidth(40);
+		results.getModel().addTableModelListener(new TableModelListener() {
+
+			@SuppressWarnings("unused")
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				int row = e.getFirstRow();
+				int column = e.getColumn();
+				TableModel model = (TableModel) e.getSource();
+				String columnName = model.getColumnName(column);
+				Object data = model.getValueAt(row, column);
+
+				// Update here
+
+			}
+		});
+
+		scroll = new JScrollPane(results);
+		scroll.setBounds(400, 100, 700, 500);
+		results.setFillsViewportHeight(true);
+		content.add(scroll);
+
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
@@ -144,11 +175,6 @@ public class SearchBook extends JFrame {
 
 			}
 		});
-
-		imgIcon = new ImageIcon("Books.jpg");
-		image = new JLabel(imgIcon);
-		image.setBounds(850, 250, imgIcon.getIconWidth(), imgIcon.getIconHeight());
-		getContentPane().add(image);
 	}
 
 	private static void initialize_text_field(JTextField field, String name, int x, int y) {
@@ -222,7 +248,7 @@ public class SearchBook extends JFrame {
 	}
 
 	private static void initialize_button(JButton button, String name, int x, int y) {
-		button.setBounds(x, y, 150, 50);
+		button.setBounds(x, y, 140, 50);
 		button.setBackground(Color.LIGHT_GRAY);
 		button.setFont(new Font("Hobo Std", Font.BOLD, 15));
 		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -233,6 +259,6 @@ public class SearchBook extends JFrame {
 		// initialize_text_field(search, key, 300, 120);
 		content.remove(search);
 		search = new JTextField(key);
-		initialize_text_field(search, key, 300, 120);
+		initialize_text_field(search, key, 50, 120);
 	}
 }
