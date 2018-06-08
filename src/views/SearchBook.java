@@ -50,7 +50,7 @@ public class SearchBook extends JFrame {
 			@Override
 			public void run() {
 				try {
-					SearchBook window = new SearchBook();
+					SearchBook window = new SearchBook(false);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,14 +62,14 @@ public class SearchBook extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public SearchBook() {
-		initialize();
+	public SearchBook(boolean isManager) {
+		initialize(isManager);
 	}
 
 	/**
 	 * Initialize the contents of the
 	 */
-	private void initialize() {
+	private void initialize(boolean isManager) {
 		// setBounds(10, 10, 1146, 700);
 		setSize(getMaximumSize());
 		getContentPane().setLayout(null);
@@ -111,6 +111,7 @@ public class SearchBook extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+
 				/*
 				 * try { Class.forName("com.mysql.jdbc.Driver"); Connection con
 				 * = DriverManager.getConnection(
@@ -127,6 +128,7 @@ public class SearchBook extends JFrame {
 				 * 
 				 * }
 				 */
+
 			}
 		});
 
@@ -140,8 +142,12 @@ public class SearchBook extends JFrame {
 			}
 		});
 
-		columnNames = new String[] { "ISBN", "Title", "Publisher", "Author", "Price", "Year", "Category" };
+		columnNames = new String[] { "ISBN", "Title", "Publisher", "Author", "Price", "Year", "Category", "Quantity"
+				/* "ID", "NAME", "DOB", "ADDRESS" */ };
 		results = new JTable(new Object[][] {}, columnNames);
+		if (!isManager) {
+			results.setDefaultEditor(Object.class, null);
+		}
 		results.getColumnModel().getColumn(0).setPreferredWidth(40);
 		// results.getColumnModel().getColumn(4).setPreferredWidth(40);
 		// results.getColumnModel().getColumn(5).setPreferredWidth(40);
