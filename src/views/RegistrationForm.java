@@ -198,7 +198,7 @@ public class RegistrationForm extends JFrame {
 					ArrayList<String> colVal = new ArrayList<>(
 							Arrays.asList(username.getText(), email.getText(), password.getText(), first_name.getText(),
 									last_name.getText(), phone.getText(), shipping_address.getText(), "0"));
-					ResultSet in = ex.insert("user", colNames, colVal);
+					ex.insert("user", colNames, colVal);
 					EventQueue.invokeLater(new Runnable() {
 						@Override
 						public void run() {
