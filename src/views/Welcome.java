@@ -8,6 +8,8 @@ import java.awt.Cursor;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 
@@ -24,6 +26,7 @@ public class Welcome extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel lblWelcomeToOur, lblAlreadyHaveAn, image;
 	private JButton signUp, btnSignIn;
+	static Welcome window;
 
 	/**
 	 * Launch the application.
@@ -33,7 +36,7 @@ public class Welcome extends JFrame {
 			@Override
 			public void run() {
 				try {
-					Welcome window = new Welcome();
+					window = new Welcome();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -95,5 +98,47 @@ public class Welcome extends JFrame {
 		image = new JLabel(imgIcon);
 		image.setBounds(850, 250, imgIcon.getIconWidth(), imgIcon.getIconHeight());
 		getContentPane().add(image);
+		
+		
+		
+		signUp.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				window.setVisible(false);
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							RegistrationForm window = new RegistrationForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+			}
+		});
+		btnSignIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				window.setVisible(false);
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							SignInForm window = new SignInForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+			}
+		});
+
+	
+	
 	}
 }

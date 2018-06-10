@@ -10,14 +10,21 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import controller.*;
 
 public class SignInForm extends JFrame {
 
@@ -30,7 +37,7 @@ public class SignInForm extends JFrame {
 	private JPasswordField password;
 	private ImageIcon imgIcon;
 	private JLabel note, image;
-
+	static SignInForm window;
 	/**
 	 * Launch the application.
 	 */
@@ -39,7 +46,7 @@ public class SignInForm extends JFrame {
 			@Override
 			public void run() {
 				try {
-					SignInForm window = new SignInForm();
+					window = new SignInForm();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -73,7 +80,7 @@ public class SignInForm extends JFrame {
 		note.setForeground(Color.BLACK);
 		getContentPane().add(note);
 
-		username = new JTextField("Username or Email");
+		username = new JTextField("Email");
 		username.setForeground(Color.LIGHT_GRAY);
 		username.setHorizontalAlignment(SwingConstants.CENTER);
 		username.setFont(new Font("Hobo Std", Font.PLAIN, 20));
@@ -83,7 +90,7 @@ public class SignInForm extends JFrame {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
-				if (username.getText().equals("Username or Email")) {
+				if (username.getText().equals("Email")) {
 					username.setText("");
 					username.setForeground(Color.black);
 				}
@@ -232,6 +239,67 @@ public class SignInForm extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
+			}
+		});
+		submit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Connector conn ;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("email","privilege"));
+					Condition emailc=new Condition("email","=",username.getText());
+					Condition passwordc=new Condition("password","=",password.getText());
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc,passwordc));
+					ResultSet rs=ex.selectConditional("user",colNames,conditions,true,0);
+					if(rs.next()==false){
+						int pane = JOptionPane.showConfirmDialog(window,
+				                 "incorrect email or password", "ERROR",JOptionPane.DEFAULT_OPTION);
+						
+					}else{
+						if(rs.getInt("privilege")==0){
+							EventQueue.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										window.setVisible(false);
+										UserHome window = new UserHome(username.getText());
+										window.setVisible(true);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							
+						}else{
+							EventQueue.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										window.setVisible(false);
+										ManagerHome window = new ManagerHome(username.getText());
+										window.setVisible(true);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							
+							
+							
+						}
+						
+						
+					}
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window,
+			                 "error in connection", "ERROR",JOptionPane.DEFAULT_OPTION);
+					//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
+
+
+				
 			}
 		});
 		getContentPane().add(submit);

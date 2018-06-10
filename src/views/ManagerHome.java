@@ -23,6 +23,7 @@ public class ManagerHome extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
+	String email;
 
 	/**
 	 * Launch the application.
@@ -45,6 +46,10 @@ public class ManagerHome extends JFrame {
 	 * Create the application.
 	 */
 	public ManagerHome() {
+		initialize();
+	}
+	public ManagerHome(String email) {
+		this.email=email;
 		initialize();
 	}
 

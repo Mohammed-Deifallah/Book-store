@@ -8,22 +8,24 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
-public class UserHome extends JFrame {
+public class ViewCart extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton editInfo, search, add, view, remove, logout;
-	private ImageIcon imgIcon;
-	private JLabel note, image;
+	private JButton back, logout, calc;
+	private String[] columnNames;
+	private JLabel note, total;
+	private JTable cart;
+	private JScrollPane scroll;
 	private static Container content;
-	String email;
 
 	/**
 	 * Launch the application.
@@ -33,7 +35,7 @@ public class UserHome extends JFrame {
 			@Override
 			public void run() {
 				try {
-					UserHome window = new UserHome();
+					ViewCart window = new ViewCart();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,11 +47,7 @@ public class UserHome extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public UserHome() {
-		initialize();
-	}
-	public UserHome(String email) {
-		this.email=email;
+	public ViewCart() {
 		initialize();
 	}
 
@@ -66,62 +64,46 @@ public class UserHome extends JFrame {
 
 		content = getContentPane();
 
-		note = new JLabel("User Home");
+		note = new JLabel("View Cart");
 		note.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		note.setBounds(50, 0, 700, 50);
 		note.setForeground(Color.BLACK);
 		getContentPane().add(note);
 
-		editInfo = new JButton("Edit info");
-		initialize_button(editInfo, "Edit info", 200, 120);
-		editInfo.addActionListener(new ActionListener() {
+		back = new JButton("Back");
+		initialize_button(back, "Back", 150, 240);
+		back.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
 			}
 		});
-		
-		search = new JButton("Search");
-		initialize_button(search, "Search", 460, 120);
-		search.addActionListener(new ActionListener() {
+
+		calc = new JButton("Calculate Total Price");
+		initialize_button(calc, "Calculate Total Price", 150, 120);
+		calc.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
 
 			}
 		});
-		
-		add = new JButton("Add to cart");
-		initialize_button(add, "Add to cart", 200, 180);
-		add.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
+		columnNames = new String[] { "ISBN", "Title", "Price" };
+		cart = new JTable(new Object[][] {}, columnNames);
+		cart.setDefaultEditor(Object.class, null);
 
-			}
-		});
-		
-		view = new JButton("View cart");
-		initialize_button(view, "View cart", 460, 180);
-		view.addActionListener(new ActionListener() {
+		scroll = new JScrollPane(cart);
+		scroll.setBounds(400, 100, 300, 500);
+		cart.setFillsViewportHeight(true);
+		content.add(scroll);
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
+		total = new JLabel("Total Price: ");
+		total.setBounds(600, 80, 150, 10);
+		content.add(total);
 
-			}
-		});
-		
-		remove = new JButton("Remove from cart");
-		initialize_button(remove, "Remove from cart", 330, 240);
-		remove.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
-			}
-		});
-		
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
@@ -131,11 +113,6 @@ public class UserHome extends JFrame {
 
 			}
 		});
-
-		imgIcon = new ImageIcon("Books.jpg");
-		image = new JLabel(imgIcon);
-		image.setBounds(850, 250, imgIcon.getIconWidth(), imgIcon.getIconHeight());
-		getContentPane().add(image);
 	}
 
 	private static void initialize_button(JButton button, String name, int x, int y) {

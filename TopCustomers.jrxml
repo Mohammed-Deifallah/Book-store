@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TopCustomers" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b2fe7756-0eb9-4f49-ad2c-232ea6bc65e9">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -24,7 +25,7 @@
 		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch">
+		<band height="42" splitType="Stretch">
 			<staticText>
 				<reportElement x="40" y="22" width="100" height="20" uuid="ed526d82-da38-4d04-bd4e-9983278d376c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -37,7 +38,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Quantity]]></text>
+				<text><![CDATA[Qunatity]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="222" y="22" width="100" height="20" uuid="090e336d-a014-48d0-915c-739fc078d60c"/>
