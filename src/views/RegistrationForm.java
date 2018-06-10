@@ -196,8 +196,8 @@ public class RegistrationForm extends JFrame {
 					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("user name", "email", "password",
 							"first_name", "last_name", "phone_number", "shipping_address", "privilege"));
 					ArrayList<String> colVal = new ArrayList<>(
-							Arrays.asList(username.getText(), email.getText(), password.getText(), first_name.getText(),
-									last_name.getText(), phone.getText(), shipping_address.getText(), "0"));
+							Arrays.asList("\""+username.getText()+"\"", "\""+email.getText()+"\"", "\""+password.getText()+"\"", "\""+first_name.getText()+"\"",
+									"\""+last_name.getText()+"\"", "\""+phone.getText()+"\"","\""+ shipping_address.getText()+"\"","\""+ "0"+"\""));
 					ex.insert("user", colNames, colVal);
 					EventQueue.invokeLater(new Runnable() {
 						@Override
@@ -217,6 +217,7 @@ public class RegistrationForm extends JFrame {
 							"ERROR", JOptionPane.DEFAULT_OPTION);
 					// window.dispatchEvent(new WindowEvent(window,
 					// WindowEvent.WINDOW_CLOSING));
+					System.out.println(e.getMessage());
 					e.printStackTrace();
 					return;
 
