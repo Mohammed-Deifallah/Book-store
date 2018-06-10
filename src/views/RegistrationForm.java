@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,7 +25,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import controller.*;
+import controller.Connector;
+import controller.Excuter;
 
 public class RegistrationForm extends JFrame {
 
@@ -41,6 +41,7 @@ public class RegistrationForm extends JFrame {
 	private JLabel note, image, tri;
 	private static Container content;
 	static RegistrationForm window;
+
 	/**
 	 * Launch the application.
 	 */
@@ -75,7 +76,7 @@ public class RegistrationForm extends JFrame {
 		setTitle("Book Store");
 		getContentPane().setBackground(Color.ORANGE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		content = getContentPane();
 
 		note = new JLabel("Sign up");
@@ -89,19 +90,19 @@ public class RegistrationForm extends JFrame {
 
 		email = new JTextField("Email");
 		initialize_text_field(email, "Email", 460, 120);
-		
+
 		first_name = new JTextField("First Name");
 		initialize_text_field(first_name, "First Name", 140, 180);
-		
+
 		last_name = new JTextField("Last Name");
 		initialize_text_field(last_name, "Last Name", 460, 180);
-		
+
 		shipping_address = new JTextField("Address");
 		initialize_text_field(shipping_address, "Address", 140, 240);
-		
+
 		phone = new JTextField("Phone");
 		initialize_text_field(phone, "Phone", 460, 240);
-		
+
 		password = new JPasswordField("Password");
 		initialize_password_field(password, "Password", 140, 300);
 
@@ -131,90 +132,101 @@ public class RegistrationForm extends JFrame {
 		getContentPane().add(tri);
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-			if(password.getText().compareTo(repassword.getText())!=0){
-				System.out.println(password.getText()+repassword.getText());
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "please make sure you wrote password correctly", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				return;
-			}
-			if(password.getText().length()<3){
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "please length should be => 3", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				return;
-			}
-			if(username.getText().compareTo("Username")==0){
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "please check username", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				return;
-			}
-			if(!email.getText().contains("@")){
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "please check email", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				return;
-			}
-			if(first_name.getText().compareTo("First Name")==0){
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "please check first name", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				return;
-			}
-			if(last_name.getText().compareTo("Last Name")==0){
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "please check last name", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				return;
-			}
-			if(shipping_address.getText().compareTo("Address")==0){
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "please check address", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				return;
-			}
-			if(!java.util.regex.Pattern.matches("\\d+", phone.getText())){
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "please check phone number", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				return;
-			}
-			Connector conn ;
-			try {
-				Excuter ex = new Excuter(Connector.getInstance());
-				ArrayList<String> colNames = new ArrayList<>(Arrays.asList("user name","email","password","first_name","last_name","phone_number","shipping_address","privilege"));
-				ArrayList<String> colVal = new ArrayList<>(Arrays.asList(username.getText(), email.getText(),password.getText(), first_name.getText(), last_name.getText(), phone.getText(), shipping_address.getText(),"0"));
-				ResultSet in = ex.insert("user",colNames,colVal);
-				EventQueue.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							window.setVisible(false);
-							SignInForm window = new SignInForm();
-							window.setVisible(true);
-						} catch (Exception e) {
-							e.printStackTrace();
+
+				if (password.getText().compareTo(repassword.getText()) != 0) {
+					System.out.println(password.getText() + repassword.getText());
+					int pane = JOptionPane.showConfirmDialog(window, "please make sure you wrote password correctly",
+							"ERROR", JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (password.getText().length() < 3) {
+					int pane = JOptionPane.showConfirmDialog(window, "please length should be => 3", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (username.getText().compareTo("Username") == 0) {
+					int pane = JOptionPane.showConfirmDialog(window, "please check username", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (!email.getText().contains("@")) {
+					int pane = JOptionPane.showConfirmDialog(window, "please check email", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (first_name.getText().compareTo("First Name") == 0) {
+					int pane = JOptionPane.showConfirmDialog(window, "please check first name", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (last_name.getText().compareTo("Last Name") == 0) {
+					int pane = JOptionPane.showConfirmDialog(window, "please check last name", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (shipping_address.getText().compareTo("Address") == 0) {
+					int pane = JOptionPane.showConfirmDialog(window, "please check address", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (!java.util.regex.Pattern.matches("\\d+", phone.getText())) {
+					int pane = JOptionPane.showConfirmDialog(window, "please check phone number", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				Connector conn;
+				try {
+					Excuter ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("user name", "email", "password",
+							"first_name", "last_name", "phone_number", "shipping_address", "privilege"));
+					ArrayList<String> colVal = new ArrayList<>(
+							Arrays.asList(username.getText(), email.getText(), password.getText(), first_name.getText(),
+									last_name.getText(), phone.getText(), shipping_address.getText(), "0"));
+					ResultSet in = ex.insert("user", colNames, colVal);
+					EventQueue.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								window.setVisible(false);
+								SignInForm window = new SignInForm();
+								window.setVisible(true);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
-					}
-				});
-				
-			} catch (SQLException | ClassNotFoundException e) {
-				int pane = JOptionPane.showConfirmDialog(window,
-		                 "same email exists or error in database happened", "ERROR",JOptionPane.DEFAULT_OPTION);
-				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-				e.printStackTrace();
-				return;
-				
-			}
-			
-			
+					});
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "same email exists or error in database happened",
+							"ERROR", JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+					return;
+
+				}
+
 			}
 		});
 	}
-	
-	private static void initialize_text_field(JTextField field, String name, int x, int y){
+
+	private static void initialize_text_field(JTextField field, String name, int x, int y) {
 		field.setForeground(Color.LIGHT_GRAY);
 		field.setHorizontalAlignment(SwingConstants.CENTER);
 		field.setFont(new Font("Hobo Std", Font.PLAIN, 20));
@@ -286,8 +298,8 @@ public class RegistrationForm extends JFrame {
 		});
 		content.add(field);
 	}
-	
-	private static void initialize_password_field(JPasswordField pass, String name, int x, int y){
+
+	private static void initialize_password_field(JPasswordField pass, String name, int x, int y) {
 		pass.setForeground(Color.LIGHT_GRAY);
 		pass.setHorizontalAlignment(SwingConstants.CENTER);
 		pass.setFont(new Font("Hobo Std", Font.PLAIN, 20));
@@ -365,7 +377,5 @@ public class RegistrationForm extends JFrame {
 		});
 		content.add(pass);
 	}
-	
-
 
 }
