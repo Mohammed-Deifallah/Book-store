@@ -15,7 +15,7 @@ public class ConstructStatments {
 	public static String getSelectQuery(String tableName, ArrayList<String> columnNames, int offset) {
 		String query = " SELECT " + commaSep(columnNames) +
 					   " FROM " + tableName +
-					   " LIMIT " + limitNum + " OFFSET " + offset;
+					   " LIMIT " + offset + " , " + (offset+limitNum);
 		return query;
 	}
 	
@@ -32,7 +32,7 @@ public class ConstructStatments {
 		String query = "SELECT " + commaSep(columnToSelect) +
 				       " FROM " + tableName +
 				       " WHERE " + getCondition(conditions, and) +
-				       " LIMIT " + limitNum + " OFFSET " + offset;
+				       " LIMIT " + offset + " , " + (offset+limitNum);
 		return query;
 	}
 	
