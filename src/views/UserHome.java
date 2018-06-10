@@ -23,6 +23,7 @@ public class UserHome extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
+	String email;
 
 	/**
 	 * Launch the application.
@@ -45,6 +46,10 @@ public class UserHome extends JFrame {
 	 * Create the application.
 	 */
 	public UserHome() {
+		initialize();
+	}
+	public UserHome(String email) {
+		this.email=email;
 		initialize();
 	}
 

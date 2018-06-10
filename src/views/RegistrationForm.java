@@ -191,7 +191,8 @@ public class RegistrationForm extends JFrame {
 					@Override
 					public void run() {
 						try {
-							UserHome window = new UserHome();
+							window.setVisible(false);
+							SignInForm window = new SignInForm();
 							window.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -201,7 +202,7 @@ public class RegistrationForm extends JFrame {
 				
 			} catch (SQLException | ClassNotFoundException e) {
 				int pane = JOptionPane.showConfirmDialog(window,
-		                 "same email exists", "ERROR",JOptionPane.DEFAULT_OPTION);
+		                 "same email exists or error in database happened", "ERROR",JOptionPane.DEFAULT_OPTION);
 				//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 				e.printStackTrace();
 				return;
