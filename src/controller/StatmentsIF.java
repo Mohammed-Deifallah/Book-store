@@ -75,5 +75,7 @@ public interface StatmentsIF {
 	
 	public ResultSet totalSalesBooks() throws SQLException;
 	
+	public boolean delete(String tableName, ArrayList<Condition> conditions, boolean and) throws SQLException;
+	
 	
 }

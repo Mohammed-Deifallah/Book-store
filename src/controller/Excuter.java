@@ -21,14 +21,21 @@ public class Excuter implements StatmentsIF{
 		// TODO Auto-generated method stub
 		String query = ConstructStatments.getInsertQuery(tableName, columnNames, values);
 		System.out.println(query);
-		return stat.execute(query);
+		conn.setAutoCommit(false);
+		boolean ret = stat.execute(query);
+		conn.commit();
+		return ret;
 	}
 
 	@Override
 	public ResultSet select(String tableName, ArrayList<String> columnNames, int offset) throws SQLException {
 		// TODO Auto-generated method stub
+		
 		String query = ConstructStatments.getSelectQuery(tableName, columnNames, offset);
-		return stat.executeQuery(query);
+		conn.setAutoCommit(false);
+		ResultSet ret = stat.executeQuery(query);
+		conn.commit();
+		return ret;
 	}
 
 	@Override
@@ -37,7 +44,10 @@ public class Excuter implements StatmentsIF{
 		// TODO Auto-generated method stub
 		String query = ConstructStatments.getSelectConditionalQuery(tableName, columnToSelect, conditions, and, offset);
 		System.out.println(query);
-		return stat.executeQuery(query);
+		conn.setAutoCommit(false);
+		ResultSet ret = stat.executeQuery(query);
+		conn.commit();
+		return ret;
 	}
 
 	@Override
@@ -45,14 +55,20 @@ public class Excuter implements StatmentsIF{
 			boolean and) throws SQLException{
 		// TODO Auto-generated method stub
 		String query = ConstructStatments.getUpdateQuery(tableName, assignments, conditions, and);
-		return stat.executeQuery(query);
+		conn.setAutoCommit(false);
+		ResultSet ret = stat.executeQuery(query);
+		conn.commit();
+		return ret;
 	}
 	
 	@Override
 	public ResultSet totalSalesBooks() throws SQLException {
 		String query = "SELECT SUM(price * quantity) " +
 					   "FROM quantity_table";
-		return stat.executeQuery(query);
+		conn.setAutoCommit(false);
+		ResultSet ret = stat.executeQuery(query);
+		conn.commit();
+		return ret;
 	}
 	
 	@Override
@@ -65,7 +81,10 @@ public class Excuter implements StatmentsIF{
 				       "WHERE " + currentMonth +" - MONTH(l.sell_date) <= 3 " +
 				       "ORDER BY 2 DESC " +
 					   "LIMIT 5";
-		return stat.executeQuery(query);
+		conn.setAutoCommit(false);
+		ResultSet ret = stat.executeQuery(query);
+		conn.commit();
+		return ret;
 	}
 	
 	@Override
@@ -78,7 +97,20 @@ public class Excuter implements StatmentsIF{
 					   "WHERE " + currentMonth +" - MONTH(l.sell_date) <= 3 " +
 				       "ORDER BY 2 DESC " +
 					   "LIMIT 10";
-		return stat.executeQuery(query);
+		conn.setAutoCommit(false);
+		ResultSet ret = stat.executeQuery(query);
+		conn.commit();
+		return ret;
+	}
+	
+	@Override
+	public boolean delete(String tableName, ArrayList<Condition> conditions, boolean and) throws SQLException {
+		String query = ConstructStatments.getDelete(tableName, conditions, and);
+		System.out.println(query);
+		conn.setAutoCommit(false);
+		boolean ret = stat.execute(query);
+		conn.commit();
+		return ret;
 	}
 	
 }
