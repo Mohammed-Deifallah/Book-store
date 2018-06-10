@@ -248,8 +248,8 @@ public class SignInForm extends JFrame {
 				try {
 					ex = new Excuter(Connector.getInstance());
 					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("email","privilege"));
-					Condition emailc=new Condition("email","=",username.getText());
-					Condition passwordc=new Condition("password","=",password.getText());
+					Condition emailc=new Condition("email","=","\""+username.getText()+"\"");
+					Condition passwordc=new Condition("password","=","\""+password.getText()+"\"");
 					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc,passwordc));
 					ResultSet rs=ex.selectConditional("user",colNames,conditions,true,0);
 					if(rs.next()==false){

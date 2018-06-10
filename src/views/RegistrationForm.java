@@ -193,7 +193,7 @@ public class RegistrationForm extends JFrame {
 				Connector conn;
 				try {
 					Excuter ex = new Excuter(Connector.getInstance());
-					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("user name", "email", "password",
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("username", "email", "password",
 							"first_name", "last_name", "phone_number", "shipping_address", "privilege"));
 					ArrayList<String> colVal = new ArrayList<>(
 							Arrays.asList("\""+username.getText()+"\"", "\""+email.getText()+"\"", "\""+password.getText()+"\"", "\""+first_name.getText()+"\"",

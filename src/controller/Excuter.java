@@ -36,6 +36,7 @@ public class Excuter implements StatmentsIF{
 			boolean and, int offset) throws SQLException{
 		// TODO Auto-generated method stub
 		String query = ConstructStatments.getSelectConditionalQuery(tableName, columnToSelect, conditions, and, offset);
+		System.out.println(query);
 		return stat.executeQuery(query);
 	}
 

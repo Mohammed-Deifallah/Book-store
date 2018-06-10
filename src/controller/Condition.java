@@ -13,7 +13,7 @@ public class Condition {
 	}
 
 	public String getAll() {
-		return righHandSide + operation + leftHandSide;
+		return  leftHandSide+ operation + righHandSide;
 	}
 	
 	public String getRighHandSide() {
