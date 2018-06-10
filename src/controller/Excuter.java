@@ -74,12 +74,12 @@ public class Excuter implements StatmentsIF{
 	@Override
 	public ResultSet top5Customers() throws SQLException {
 		String currentMonth = Integer.toString(Calendar.getInstance().get(Calendar.MONTH) + 1);
-		String query = "SELECT first_name, last_name, email, phone_number, SUM(l.quantity)" +
+		String query = "SELECT username, first_name, last_name, email, phone_number, SUM(l.quantity)" +
 					   "FROM user as u " +
 				       "JOIN log as l " +
 					   "ON l.email = u.email " +
 				       "WHERE " + currentMonth +" - MONTH(l.sell_date) <= 3 " +
-					   "GROUP BY first_name, last_name, email, phone_number "+
+					   "GROUP BY username, first_name, last_name, email, phone_number "+
 				       "ORDER BY 2 DESC " +
 					   "LIMIT 5";
 		conn.setAutoCommit(false);
