@@ -262,6 +262,7 @@ public class SignInForm extends JFrame {
 								@Override
 								public void run() {
 									try {
+										window.setVisible(false);
 										UserHome window = new UserHome(username.getText());
 										window.setVisible(true);
 									} catch (Exception e) {
@@ -275,6 +276,7 @@ public class SignInForm extends JFrame {
 								@Override
 								public void run() {
 									try {
+										window.setVisible(false);
 										ManagerHome window = new ManagerHome(username.getText());
 										window.setVisible(true);
 									} catch (Exception e) {
