@@ -213,7 +213,7 @@ public class RegistrationForm extends JFrame {
 					});
 
 				} catch (SQLException | ClassNotFoundException e) {
-					int pane = JOptionPane.showConfirmDialog(window, "same email exists or error in database happened",
+					int pane = JOptionPane.showConfirmDialog(window, "same email or username or phone number exists or error in database happened",
 							"ERROR", JOptionPane.DEFAULT_OPTION);
 					// window.dispatchEvent(new WindowEvent(window,
 					// WindowEvent.WINDOW_CLOSING));
