@@ -52,9 +52,10 @@ public class ConstructStatments {
 	private static String getCondition(ArrayList<Condition> conditions, boolean and) {
 		String condiString = "";
 		String sep = and == true ? " AND " : " OR ";
-		for(Condition condition : conditions) {
-			condiString += condition.getAll() + sep;
+		for(int i =0 ;i<conditions.size()-1;i++) {
+			condiString += conditions.get(i).getAll() + sep;
 		}
+		condiString+=conditions.get(conditions.size()-1).getAll();
 		return condiString;
 	}
 }
