@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="jars/org.springframework.core-3.0.4.release.jar"/>
 	<classpathentry kind="lib" path="jars/slf4j.jar"/>
 	<classpathentry kind="lib" path="jars/mysql-connector-java-5.1.5-bin.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

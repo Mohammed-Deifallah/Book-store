@@ -6,8 +6,8 @@ public class ConstructStatments {
 
 	private static int limitNum = 10;
 	public static String getInsertQuery(String tableName, ArrayList<String> columnNames, ArrayList<String> values) {
-		String query = "INSERT INTO " + tableName + "( " + commaSep(columnNames) + ")"+
-						"VALUES " + "(" + commaSep(values) + ")";
+		String query = "INSERT INTO " + tableName + "(" + commaSep(columnNames) + ")"+
+						" VALUES " + "(" + commaSep(values) + ")";
 		return query;
 	}
 	

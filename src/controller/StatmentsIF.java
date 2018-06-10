@@ -20,7 +20,7 @@ public interface StatmentsIF {
 	 * 
 	 * @return string that indicates either the values inserted or not.
 	 */
-	public ResultSet insert(String tableName, ArrayList<String> columnNames, ArrayList<String> values) throws SQLException;
+	public boolean insert(String tableName, ArrayList<String> columnNames, ArrayList<String> values) throws SQLException;
 	
 	/**
 	 * selects from table

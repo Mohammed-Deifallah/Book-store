@@ -17,10 +17,11 @@ public class Excuter implements StatmentsIF{
 	}
 	
 	@Override
-	public ResultSet insert(String tableName, ArrayList<String> columnNames, ArrayList<String> values) throws SQLException {
+	public boolean insert(String tableName, ArrayList<String> columnNames, ArrayList<String> values) throws SQLException {
 		// TODO Auto-generated method stub
 		String query = ConstructStatments.getInsertQuery(tableName, columnNames, values);
-		return stat.executeQuery(query);
+		System.out.println(query);
+		return stat.execute(query);
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class Connector {
 	}
 	
 	private static Connection getConnection() throws ClassNotFoundException, SQLException {
-		String url = "jdbc:mysql://127.0.0.1:3306/book_store";
+		String url = "jdbc:mysql://localhost:3306/book_store";
 		String username = "root";
 		String password = "root";
 		Connection connection = null;
