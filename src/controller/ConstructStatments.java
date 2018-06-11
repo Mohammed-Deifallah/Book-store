@@ -43,9 +43,10 @@ public class ConstructStatments {
 	private static String getAssignment(ArrayList<Assignment> assignments) {
 		String assignString = "";
 		String sep = ",";
-		for(Assignment assign : assignments) {
-			assignString += assign.getAll() + sep;
+		for(int i =0 ;i<assignments.size()-1;i++) {
+			assignString += assignments.get(i).getAll() + sep;
 		}
+		assignString+=assignments.get(assignments.size()-1).getAll();
 		return assignString;
 	}
 	

@@ -23,7 +23,8 @@ public class UserHome extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-	String email;
+	String email="mo@";
+	static UserHome window;
 
 	/**
 	 * Launch the application.
@@ -33,7 +34,7 @@ public class UserHome extends JFrame {
 			@Override
 			public void run() {
 				try {
-					UserHome window = new UserHome();
+					window = new UserHome();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -124,6 +125,30 @@ public class UserHome extends JFrame {
 		
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
+		logout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				window.setVisible(false);
+				
+				
+				
+				
+				
+				
+				
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							SignInForm window = new SignInForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+			}
+		});
 		logout.addActionListener(new ActionListener() {
 
 			@Override
