@@ -42,7 +42,7 @@ public class AddOrRemoveFromCart extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-	String email;
+	String email="mo@";
 	static AddOrRemoveFromCart window;
 
 	/**

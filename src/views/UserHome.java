@@ -155,7 +155,18 @@ public class UserHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							ViewCart window = new ViewCart();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 		
