@@ -217,5 +217,4 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 
-INSERT INTO book(ISBN, title, pyear, category, publisher_name) VALUES (1,"hello world", 1999, "romance", "someone");
-INSERT INTO book(ISBN,title,pyear,category,publisher_name) VALUES (4,"the title",1999,"action","msh 3arf")
+
