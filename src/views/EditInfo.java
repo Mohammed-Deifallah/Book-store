@@ -11,15 +11,24 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import controller.Assignment;
+import controller.Condition;
+import controller.Connector;
+import controller.Excuter;
 import info.User;
 
 public class EditInfo extends JFrame {
@@ -34,8 +43,9 @@ public class EditInfo extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-	private User user;
-
+	static EditInfo window;
+	String emailt="mo@";
+	
 	/**
 	 * Launch the application.
 	 */
@@ -44,8 +54,7 @@ public class EditInfo extends JFrame {
 			@Override
 			public void run() {
 				try {
-					User u = new User("Mohammed", "@yahoo", "00000", "Mo", "Salah", "+20", "21");
-					EditInfo window = new EditInfo(u);
+					window = new EditInfo();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,11 +66,26 @@ public class EditInfo extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public EditInfo(User user) {
-		this.user = user;
+	public EditInfo(String email) {
+		this.emailt=email;
+		initialize();
+	}
+	public EditInfo() {
 		initialize();
 	}
 
+	String tr(String t){
+		for(int i=0;i < t.length();i++){
+			if(t.charAt(i)==':'){
+				return t.substring(i+1, t.length());
+				
+			}
+			
+		}
+		
+		return t;
+		
+	}
 	/**
 	 * Initialize the contents of the
 	 */
@@ -80,37 +104,123 @@ public class EditInfo extends JFrame {
 		note.setBounds(50, 0, 700, 50);
 		note.setForeground(Color.BLACK);
 		getContentPane().add(note);
+		ResultSet rs;
+		Excuter ex;
+		try {
+			ex = new Excuter(Connector.getInstance());
+			Condition emailc=new Condition("email","=","\""+emailt+"\"");
+			ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+			ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+			rs = ex.selectConditional("user", colNames, conditions, true, 0);
+			rs.next();
+			username = new JTextField("Username:"+rs.getString("username") );
+			initialize_text_field(username, "Username:"+rs.getString("username"), 140, 120);
 
-		username = new JTextField("Username: " + user.getUserName());
-		initialize_text_field(username, "Username: " + user.getUserName(), 140, 120);
+			email = new JTextField("Email:"+rs.getString("email") );
+			initialize_text_field(email, "Email:"+rs.getString("email") , 460, 120);
 
-		email = new JTextField("Email: " + user.getEmail());
-		initialize_text_field(email, "Email: " + user.getEmail(), 460, 120);
+			firstName = new JTextField("First Name:"+rs.getString("first_name") );
+			initialize_text_field(firstName, "First Name:"+rs.getString("first_name") , 780, 180);
 
-		firstName = new JTextField("First Name: " + user.getFirstName());
-		initialize_text_field(firstName, "First Name: " + user.getFirstName(), 460, 120);
+			lastName = new JTextField("Last Name:"+rs.getString("last_name") );
+			initialize_text_field(lastName, "Last Name:"+rs.getString("last_name") , 780, 120);
 
-		lastName = new JTextField("Last Name: " + user.getLastName());
-		initialize_text_field(lastName, "Last Name: " + user.getLastName(), 460, 120);
+			password = new JPasswordField("Password:"+rs.getString("password"));
+			initialize_password_field(password, "Password:"+rs.getString("password"), 140, 180);
 
-		password = new JPasswordField("Password");
-		initialize_password_field(password, "Password", 140, 180);
+			repassword = new JPasswordField("Re-type Password:"+rs.getString("password"));
+			initialize_password_field(repassword, "Re-type Password:"+rs.getString("password"), 460, 180);
 
-		repassword = new JPasswordField("Re-type Password");
-		initialize_password_field(repassword, "Re-type Password", 460, 180);
+			phone = new JTextField("Phone:"+rs.getString("phone_number") );
+			initialize_text_field(phone,"Phone:"+rs.getString("phone_number"), 140, 240);
 
-		phone = new JTextField("Phone: " + user.getPhone());
-		initialize_text_field(phone, "Price: " + "Phone: " + user.getPhone(), 140, 240);
+			address = new JTextField("Shipping Address:"+rs.getString("shipping_address") );
+			initialize_text_field(address, "Shipping Address:"+rs.getString("shipping_address") , 460, 240);
 
-		address = new JTextField("Shipping Address: " + user.getAddress());
-		initialize_text_field(address, "Shipping Address: " + user.getAddress(), 460, 240);
-
-		submit = new JButton("Submit");
-		initialize_button(submit, "Submit", 290, 550);
+			submit = new JButton("Submit");
+			initialize_button(submit, "Submit", 290, 550);
+		} catch (SQLException | ClassNotFoundException e1) {
+			int pane = JOptionPane.showConfirmDialog(window,
+	                 "error in connection", "ERROR",JOptionPane.DEFAULT_OPTION);
+			e1.printStackTrace();
+		}
+		
+		
+		
 		submit.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
+
+				if (tr(password.getText()).compareTo(tr(repassword.getText())) != 0) {
+					System.out.println(password.getText() + repassword.getText());
+					int pane = JOptionPane.showConfirmDialog(window, "please make sure you wrote password correctly",
+							"ERROR", JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (tr(password.getText()).length() < 3) {
+					int pane = JOptionPane.showConfirmDialog(window, "please length should be => 3", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (!email.getText().contains("@")) {
+					int pane = JOptionPane.showConfirmDialog(window, "please check email", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				if (!java.util.regex.Pattern.matches("\\d+", tr(phone.getText()))) {
+					int pane = JOptionPane.showConfirmDialog(window, "please check phone number", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				Connector conn;
+				try {
+					Excuter ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("username", "email", "password",
+							"first_name", "last_name", "phone_number", "shipping_address"));
+					ArrayList<String> colVal = new ArrayList<>(
+							Arrays.asList("\""+tr(username.getText())+"\"", "\""+tr(email.getText())+"\"", "\""+tr(password.getText())+"\"", "\""+tr(firstName.getText())+"\"",
+									"\""+tr(lastName.getText())+"\"", "\""+tr(phone.getText())+"\"","\""+ tr(address.getText())+"\""));
+					ArrayList<Assignment> ass= new ArrayList<Assignment>();
+					for(int i=0 ;i<colNames.size();i++){
+						ass.add(new Assignment(colNames.get(i),colVal.get(i)));
+					}
+					Condition emailc=new Condition("email","=","\""+emailt+"\"");
+					System.out.println(emailt);
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					ex.update("user", ass, conditions ,true);
+					
+					EventQueue.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								
+								dispose();
+								emailt=tr(email.getText());
+								SignInForm window = new SignInForm();
+								window.setVisible(true);								
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "same email or username or phone number exists or error in database happened",
+							"ERROR", JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+					return;
+
+				}
 
 			}
 		});
@@ -118,20 +228,92 @@ public class EditInfo extends JFrame {
 		cancel = new JButton("Cancel");
 		initialize_button(cancel, "Cancel", 460, 550);
 		cancel.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Connector conn ;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("email","privilege"));
+					Condition emailc=new Condition("email","=","\""+emailt+"\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					ResultSet rs=ex.selectConditional("user",colNames,conditions,true,0);
+					rs.next();
+						if(rs.getInt("privilege")==0){
+							EventQueue.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										dispose();
+										UserHome window = new UserHome(username.getText());
+										window.setVisible(true);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							
+						}else{
+							EventQueue.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										dispose();
+										ManagerHome window = new ManagerHome(username.getText());
+										window.setVisible(true);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							
+							
+							
+						}
+						
+						
+					
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window,
+			                 "error in connection", "ERROR",JOptionPane.DEFAULT_OPTION);
+					//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
 
+
+				
 			}
 		});
 
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {			
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					Condition emailc=new Condition("email","=","\""+emailt+"\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					boolean rs = ex.delete("cart",conditions,true);
+				} catch (SQLException | ClassNotFoundException e1) {
+					int pane = JOptionPane.showConfirmDialog(window,
+			                 "error in connection", "ERROR",JOptionPane.DEFAULT_OPTION);
+					e1.printStackTrace();
+				}
+				EventQueue.invokeLater(new Runnable() {
+					
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
+					
+					public void run() {
+						try {
+							dispose();
+							SignInForm window = new SignInForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
 			}
 		});
 
@@ -142,31 +324,59 @@ public class EditInfo extends JFrame {
 	}
 
 	private static void initialize_text_field(JTextField field, String name, int x, int y) {
-		// field.setForeground(Color.LIGHT_GRAY);
-		String prefix = name.substring(0, name.indexOf(':'));
+		field.setForeground(Color.LIGHT_GRAY);
 		field.setHorizontalAlignment(SwingConstants.CENTER);
 		field.setFont(new Font("Hobo Std", Font.PLAIN, 20));
 		field.setBounds(x, y, 300, 50);
+		field.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (field.getText().equals(name)) {
+					field.setText("");
+					field.setForeground(Color.black);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (field.getText().equals("")) {
+					field.setText(name);
+					field.setForeground(Color.LIGHT_GRAY);
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 		field.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				if (field.getText().length() < prefix.length()) {
+				if (field.getText().equals("")) {
 					field.setText(name);
-					// field.setForeground(Color.LIGHT_GRAY);
+					field.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-
+				if (field.getText().equals(name)) {
+					field.setText("");
+					field.setForeground(Color.black);
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				if (field.getText().length() < prefix.length()) {
+				if (field.getText().equals("")) {
 					field.setText(name);
-					// field.setForeground(Color.LIGHT_GRAY);
+					field.setForeground(Color.LIGHT_GRAY);
 				}
 			}
 
@@ -177,7 +387,10 @@ public class EditInfo extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-
+				if (field.getText().equals(name)) {
+					field.setText("");
+					field.setForeground(Color.black);
+				}
 			}
 		});
 		content.add(field);

@@ -7,11 +7,20 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import controller.Condition;
+import controller.Connector;
+import controller.Excuter;
 
 public class UserHome extends JFrame {
 
@@ -79,7 +88,22 @@ public class UserHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							EditInfo window = new EditInfo(email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+				
+				
+				
 			}
 		});
 		
@@ -126,19 +150,23 @@ public class UserHome extends JFrame {
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				window.setVisible(false);
-				
-				
-				
-				
-				
-				
-				
+			public void actionPerformed(ActionEvent arg0) {			
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					Condition emailc=new Condition("email","=","\""+email+"\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					boolean rs = ex.delete("cart",conditions,true);
+				} catch (SQLException | ClassNotFoundException e1) {
+					int pane = JOptionPane.showConfirmDialog(window,
+			                 "error in connection", "ERROR",JOptionPane.DEFAULT_OPTION);
+					e1.printStackTrace();
+				}
 				EventQueue.invokeLater(new Runnable() {
 					@Override
 					public void run() {
 						try {
+							dispose();
 							SignInForm window = new SignInForm();
 							window.setVisible(true);
 						} catch (Exception e) {
@@ -147,13 +175,6 @@ public class UserHome extends JFrame {
 					}
 				});
 				
-			}
-		});
-		logout.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
 			}
 		});
 

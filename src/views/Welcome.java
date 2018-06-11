@@ -105,11 +105,12 @@ public class Welcome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				window.setVisible(false);
+				
 				EventQueue.invokeLater(new Runnable() {
 					@Override
 					public void run() {
 						try {
+							dispose();
 							RegistrationForm window = new RegistrationForm();
 							window.setVisible(true);
 						} catch (Exception e) {
@@ -122,11 +123,11 @@ public class Welcome extends JFrame {
 		});
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				window.setVisible(false);
 				EventQueue.invokeLater(new Runnable() {
 					@Override
 					public void run() {
 						try {
+							dispose();
 							SignInForm window = new SignInForm();
 							window.setVisible(true);
 						} catch (Exception e) {

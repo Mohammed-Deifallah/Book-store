@@ -37,7 +37,7 @@ public class SignInForm extends JFrame {
 	private JPasswordField password;
 	private ImageIcon imgIcon;
 	private JLabel note, image;
-	static SignInForm window;
+	private static SignInForm window;
 	/**
 	 * Launch the application.
 	 */
@@ -258,11 +258,12 @@ public class SignInForm extends JFrame {
 						
 					}else{
 						if(rs.getInt("privilege")==0){
+							
 							EventQueue.invokeLater(new Runnable() {
 								@Override
 								public void run() {
 									try {
-										window.setVisible(false);
+										dispose();
 										UserHome window = new UserHome(username.getText());
 										window.setVisible(true);
 									} catch (Exception e) {
@@ -276,7 +277,7 @@ public class SignInForm extends JFrame {
 								@Override
 								public void run() {
 									try {
-										window.setVisible(false);
+										dispose();
 										ManagerHome window = new ManagerHome(username.getText());
 										window.setVisible(true);
 									} catch (Exception e) {
