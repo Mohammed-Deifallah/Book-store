@@ -13,18 +13,28 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
+import controller.Condition;
+import controller.Connector;
+import controller.Excuter;
 
 public class SearchBook extends JFrame {
 
@@ -32,7 +42,7 @@ public class SearchBook extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton submit, cancel, logout;
+	private JButton submit, cancel, logout,next,prev;
 	private JTextField search;
 	private String[] columnNames;
 	private JLabel note, key;
@@ -41,6 +51,10 @@ public class SearchBook extends JFrame {
 	private JComboBox<String> list;
 	private final String options[] = { "ISBN", "Title", "Category", "Author", "Publisher" };
 	private static Container content;
+	static SearchBook window;
+	String email = "mo@";
+	int offset;
+	ResultSet rs;
 
 	/**
 	 * Launch the application.
@@ -50,7 +64,7 @@ public class SearchBook extends JFrame {
 			@Override
 			public void run() {
 				try {
-					SearchBook window = new SearchBook(false);
+					window = new SearchBook(false);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -63,6 +77,11 @@ public class SearchBook extends JFrame {
 	 * Create the application.
 	 */
 	public SearchBook(boolean isManager) {
+		initialize(isManager);
+	}
+
+	public SearchBook(boolean isManager, String email) {
+		this.email = email;
 		initialize(isManager);
 	}
 
@@ -111,38 +130,269 @@ public class SearchBook extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				offset=0;
+				
+					Excuter ex;
+					try {
+						ex = new Excuter(Connector.getInstance());
+						ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+						ArrayList<Condition> conditions = new ArrayList<>();
+						if(list.getSelectedIndex()==0){
+						Condition c=new Condition("ISBN","=","\""+search.getText()+"\"");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==1){
+							Condition c=new Condition("title"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==2){
+							Condition c=new Condition("category"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==3){
+							ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN","title","publisher_name","category","price","quantity","pyear"));
+							Condition c=new Condition("author_name"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames2,conditions,true,offset);
+							
+						}else if(list.getSelectedIndex()==4){
+							Condition c=new Condition("publisher_name"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}
+						
 
-				/*
-				 * try { Class.forName("com.mysql.jdbc.Driver"); Connection con
-				 * = DriverManager.getConnection(
-				 * "jdbc:mysql://localhost:3306/PHONEBOOK", "root", "admin");
-				 * DefaultTableModel model = new DefaultTableModel( new String[]
-				 * { "ID", "NAME", "BIRTH_DATE", "ADDRESS" }, 0); ResultSet rs =
-				 * con.createStatement().executeQuery(
-				 * "SELECT ID, PNAME, DOB, PADDRESS FROM PERSON"); while
-				 * (rs.next()) { String d = rs.getString("ID"); String e =
-				 * rs.getString("PNAME"); String f = rs.getString("DOB"); String
-				 * q = rs.getString("PADDRESS"); model.addRow(new Object[] { d,
-				 * e, f, q }); } results.setModel(model); } catch (Exception e)
-				 * {
-				 * 
-				 * }
-				 */
-
+						 TableModel model= results.getModel();
+						while (rs.next()) {
+							String d = rs.getString("ISBN");
+							String e = rs.getString("title");
+							String f = rs.getString("publisher_name");
+							String q = rs.getString("category");
+							String r = rs.getString("pyear");
+							String s = rs.getString("price");
+							String t = rs.getString("quantity");
+							((DefaultTableModel) model).addRow(new Object[] { d, e, f, q,r,s,t });
+						}
+						results.setModel(model);
+						
+						
+					} catch (SQLException | ClassNotFoundException e) {
+						int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+								JOptionPane.DEFAULT_OPTION);
+						// window.dispatchEvent(new WindowEvent(window,
+						// WindowEvent.WINDOW_CLOSING));
+						e.printStackTrace();
+					}
+					
+					
+				
+				
+				
+				
 			}
+
 		});
 
-		cancel = new JButton("Cancel");
-		initialize_button(cancel, "Cancel", 210, 240);
-		cancel.addActionListener(new ActionListener() {
+		next = new JButton("next");
+		initialize_button(next, "next", 50, 300);
+		next.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				offset+=10;
+				
+					Excuter ex;
+					try {
+						ex = new Excuter(Connector.getInstance());
+						ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+						ArrayList<Condition> conditions = new ArrayList<>();
+						if(list.getSelectedIndex()==0){
+						Condition c=new Condition("ISBN","=","\""+search.getText()+"\"");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==1){
+							Condition c=new Condition("title"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==2){
+							Condition c=new Condition("category"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==3){
+							ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN","title","publisher_name","category","price","quantity","pyear"));
+							Condition c=new Condition("author_name"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames2,conditions,true,offset);
+							
+						}else if(list.getSelectedIndex()==4){
+							Condition c=new Condition("publisher_name"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}
+						
+
+						 TableModel model= results.getModel();
+						while (rs.next()) {
+							String d = rs.getString("ISBN");
+							String e = rs.getString("title");
+							String f = rs.getString("publisher_name");
+							String q = rs.getString("category");
+							String r = rs.getString("pyear");
+							String s = rs.getString("price");
+							String t = rs.getString("quantity");
+							((DefaultTableModel) model).addRow(new Object[] { d, e, f, q,r,s,t });
+						}
+						results.setModel(model);
+						
+						
+					} catch (SQLException | ClassNotFoundException e) {
+						int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+								JOptionPane.DEFAULT_OPTION);
+						// window.dispatchEvent(new WindowEvent(window,
+						// WindowEvent.WINDOW_CLOSING));
+						e.printStackTrace();
+					}
+					
+					
+				
+				
+				
+				
+			}
+
+		});
+		
+		
+		prev = new JButton("prev");
+		initialize_button(prev, "prev", 210, 300);
+		prev.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				offset-=10;
+				if(offset<0){
+					offset=0;
+				}
+					Excuter ex;
+					try {
+						ex = new Excuter(Connector.getInstance());
+						ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+						ArrayList<Condition> conditions = new ArrayList<>();
+						if(list.getSelectedIndex()==0){
+						Condition c=new Condition("ISBN","=","\""+search.getText()+"\"");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==1){
+							Condition c=new Condition("title"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==2){
+							Condition c=new Condition("category"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}else if(list.getSelectedIndex()==3){
+							ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN","title","publisher_name","category","price","quantity","pyear"));
+							Condition c=new Condition("author_name"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames2,conditions,true,offset);
+							
+						}else if(list.getSelectedIndex()==4){
+							Condition c=new Condition("publisher_name"," LIKE ","\'%"+search.getText()+"%\'");
+							conditions.add(c);
+							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						}
+						
+
+						 TableModel model= results.getModel();
+						while (rs.next()) {
+							String d = rs.getString("ISBN");
+							String e = rs.getString("title");
+							String f = rs.getString("publisher_name");
+							String q = rs.getString("category");
+							String r = rs.getString("pyear");
+							String s = rs.getString("price");
+							String t = rs.getString("quantity");
+							((DefaultTableModel) model).addRow(new Object[] { d, e, f, q,r,s,t });
+						}
+						results.setModel(model);
+						
+						
+					}catch (SQLException | ClassNotFoundException e) {
+						int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+								JOptionPane.DEFAULT_OPTION);
+						// window.dispatchEvent(new WindowEvent(window,
+						// WindowEvent.WINDOW_CLOSING));
+						e.printStackTrace();
+					}
+					
+					
+				
+				
+				
+				
+			}
+
+		});
+		
+		
+		
+		
+		cancel = new JButton("Cancel");
+		initialize_button(cancel, "Cancel", 210, 240);
+		
+		cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Connector conn;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("email", "privilege"));
+					Condition emailc = new Condition("email", "=", "\"" + email + "\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					ResultSet rs = ex.selectConditional("user", colNames, conditions, true, 0);
+					rs.next();
+					if (rs.getInt("privilege") == 0) {
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									dispose();
+									UserHome window = new UserHome(email);
+									window.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+					} else {
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									dispose();
+									ManagerHome window = new ManagerHome(email);
+									window.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+					}
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
 
 			}
 		});
 
-		columnNames = new String[] { "ISBN", "Title", "Publisher", "Author", "Price", "Year", "Category", "Quantity"
+		columnNames = new String[] { "ISBN", "Title", "Publisher", "Category","Year","Price",  "Quantity"
 				/* "ID", "NAME", "DOB", "ADDRESS" */ };
 		results = new JTable(new Object[][] {}, columnNames);
 		if (!isManager) {
@@ -175,9 +425,30 @@ public class SearchBook extends JFrame {
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					Condition emailc = new Condition("email", "=", "\"" + email + "\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					boolean rs = ex.delete("cart", conditions, true);
+				} catch (SQLException | ClassNotFoundException e1) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					e1.printStackTrace();
+				}
+				EventQueue.invokeLater(new Runnable() {
+
+					public void run() {
+						try {
+							dispose();
+							SignInForm window = new SignInForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 
 			}
 		});

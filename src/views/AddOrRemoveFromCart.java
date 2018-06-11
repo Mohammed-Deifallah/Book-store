@@ -11,13 +11,25 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import controller.Assignment;
+import controller.Condition;
+import controller.Connector;
+import controller.Excuter;
 
 public class AddOrRemoveFromCart extends JFrame {
 
@@ -30,6 +42,8 @@ public class AddOrRemoveFromCart extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
+	String email;
+	static AddOrRemoveFromCart window;
 
 	/**
 	 * Launch the application.
@@ -39,7 +53,7 @@ public class AddOrRemoveFromCart extends JFrame {
 			@Override
 			public void run() {
 				try {
-					AddOrRemoveFromCart window = new AddOrRemoveFromCart();
+					window = new AddOrRemoveFromCart();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,6 +66,11 @@ public class AddOrRemoveFromCart extends JFrame {
 	 * Create the application.
 	 */
 	public AddOrRemoveFromCart() {
+		initialize();
+	}
+
+	public AddOrRemoveFromCart(String email) {
+		this.email = email;
 		initialize();
 	}
 
@@ -86,8 +105,59 @@ public class AddOrRemoveFromCart extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				ResultSet rs;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+					ArrayList<Condition> conditions = new ArrayList<>();
+					if (isbn.getText().compareTo("ISBN") != 0) {
+						Condition c = new Condition("ISBN", "=", "\"" + isbn.getText() + "\"");
+						conditions.add(c);
+						if (title.getText().compareTo("Title") != 0) {
+							Condition c2 = new Condition("title", "=", "\"" + title.getText() + "\"");
+							conditions.add(c2);
+
+						}
+						rs = ex.selectConditional("book", colNames, conditions, true, 0);
+						if (rs.next() == false) {
+							int pane = JOptionPane.showConfirmDialog(window, "no such book found", "ERROR",
+									JOptionPane.DEFAULT_OPTION);
+							return;
+						}
+						conditions = new ArrayList<>((Arrays.asList(c)));
+						Condition c3 = new Condition("email", "=", "\"" + email + "\"");
+						conditions.add(c3);
+						rs = ex.selectConditional("cart", colNames, conditions, true, 0);
+						colNames = new ArrayList<>(Arrays.asList("ISBN", "email", "quantity"));
+						ArrayList<String> values = new ArrayList<>(
+								Arrays.asList("\"" + isbn.getText() + "\"", "\"" + email + "\"", "1"));
+						if (rs.next() == false) {
+
+							ex.insert("cart", colNames, values);
+						} else {
+							ArrayList<Assignment> ass = new ArrayList<Assignment>();
+							ass.add(new Assignment("quantity", "quantity+1"));
+							ex.update("cart", ass, conditions, true);
+
+						}
+
+					} else {
+						int pane = JOptionPane.showConfirmDialog(window, "isbn is not set", "ERROR",
+								JOptionPane.DEFAULT_OPTION);
+						return;
+					}
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
 
 			}
+
 		});
 
 		remove = new JButton("Remove");
@@ -96,16 +166,121 @@ public class AddOrRemoveFromCart extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				ResultSet rs;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+					ArrayList<Condition> conditions = new ArrayList<>();
+					if (isbn.getText().compareTo("ISBN") != 0) {
+						Condition c = new Condition("ISBN", "=", "\"" + isbn.getText() + "\"");
+						conditions.add(c);
+						if (title.getText().compareTo("Title") != 0) {
+							Condition c2 = new Condition("title", "=", "\"" + title.getText() + "\"");
+							conditions.add(c2);
+
+						}
+						rs = ex.selectConditional("book", colNames, conditions, true, 0);
+						if (rs.next() == false) {
+							int pane = JOptionPane.showConfirmDialog(window, "no such book found", "ERROR",
+									JOptionPane.DEFAULT_OPTION);
+							return;
+						}
+						conditions = new ArrayList<>((Arrays.asList(c)));
+						Condition c3 = new Condition("email", "=", "\"" + email + "\"");
+						conditions.add(c3);
+						rs = ex.selectConditional("cart", colNames, conditions, true, 0);
+						// colNames = new
+						// ArrayList<>(Arrays.asList("ISBN","email","quantity"));
+						// ArrayList <String>values = new
+						// ArrayList<>(Arrays.asList("\""+isbn.getText()+"\"","\""+email+"\"","1"));
+						if (rs.next() == false) {
+							int pane = JOptionPane.showConfirmDialog(window, "book is not in cart", "ERROR",
+									JOptionPane.DEFAULT_OPTION);
+							return;
+						} else {
+
+							if (rs.getInt("quantity") == 1) {
+								ex.delete("cart", conditions, true);
+
+							}
+
+							else {
+								ArrayList<Assignment> ass = new ArrayList<Assignment>();
+								ass.add(new Assignment("quantity", "quantity-1"));
+								ex.update("cart", ass, conditions, true);
+							}
+
+						}
+
+					} else {
+						int pane = JOptionPane.showConfirmDialog(window, "isbn is not set", "ERROR",
+								JOptionPane.DEFAULT_OPTION);
+						return;
+					}
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
 
 			}
+
 		});
 
 		cancel = new JButton("Cancel");
 		initialize_button(cancel, "Cancel", 375, 275);
 		cancel.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Connector conn;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("email", "privilege"));
+					Condition emailc = new Condition("email", "=", "\"" + email + "\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					ResultSet rs = ex.selectConditional("user", colNames, conditions, true, 0);
+					rs.next();
+					if (rs.getInt("privilege") == 0) {
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									dispose();
+									UserHome window = new UserHome(email);
+									window.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+					} else {
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									dispose();
+									ManagerHome window = new ManagerHome(email);
+									window.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+					}
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
 
 			}
 		});
@@ -113,9 +288,30 @@ public class AddOrRemoveFromCart extends JFrame {
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					Condition emailc = new Condition("email", "=", "\"" + email + "\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					boolean rs = ex.delete("cart", conditions, true);
+				} catch (SQLException | ClassNotFoundException e1) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					e1.printStackTrace();
+				}
+				EventQueue.invokeLater(new Runnable() {
+
+					public void run() {
+						try {
+							dispose();
+							SignInForm window = new SignInForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 
 			}
 		});

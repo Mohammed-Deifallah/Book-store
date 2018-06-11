@@ -67,7 +67,7 @@ public interface StatmentsIF {
 	 * and -> boolean to indicate if the operation between all conditions is AND(True) or OR(False)
 	 * conditions -> condition to set the values on.
 	 */
-	public ResultSet update(String tableName, ArrayList<Assignment> assignments, ArrayList<Condition> conditions, boolean and) throws SQLException;
+	public boolean update(String tableName, ArrayList<Assignment> assignments, ArrayList<Condition> conditions, boolean and) throws SQLException;
 	
 	public ResultSet top10Books() throws SQLException;
 	

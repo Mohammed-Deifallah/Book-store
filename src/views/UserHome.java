@@ -113,17 +113,39 @@ public class UserHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							SearchBook window = new SearchBook(false,email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 		
-		add = new JButton("Add to cart");
-		initialize_button(add, "Add to cart", 200, 180);
+		add = new JButton("Add/delete from cart");
+		initialize_button(add, "Add/delete from cart", 200, 180);
 		add.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							AddOrRemoveFromCart window = new AddOrRemoveFromCart(email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 		
@@ -137,15 +159,7 @@ public class UserHome extends JFrame {
 			}
 		});
 		
-		remove = new JButton("Remove from cart");
-		initialize_button(remove, "Remove from cart", 330, 240);
-		remove.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
-			}
-		});
 		
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);

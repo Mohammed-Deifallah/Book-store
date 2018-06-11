@@ -51,12 +51,13 @@ public class Excuter implements StatmentsIF{
 	}
 
 	@Override
-	public ResultSet update(String tableName, ArrayList<Assignment> assignments, ArrayList<Condition> conditions,
+	public boolean update(String tableName, ArrayList<Assignment> assignments, ArrayList<Condition> conditions,
 			boolean and) throws SQLException{
 		// TODO Auto-generated method stub
 		String query = ConstructStatments.getUpdateQuery(tableName, assignments, conditions, and);
+		System.out.println(query);
 		conn.setAutoCommit(false);
-		ResultSet ret = stat.executeQuery(query);
+		boolean ret = stat.execute(query);
 		conn.commit();
 		return ret;
 	}

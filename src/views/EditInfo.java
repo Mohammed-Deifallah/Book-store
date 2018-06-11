@@ -244,7 +244,7 @@ public class EditInfo extends JFrame {
 								public void run() {
 									try {
 										dispose();
-										UserHome window = new UserHome(username.getText());
+										UserHome window = new UserHome(emailt);
 										window.setVisible(true);
 									} catch (Exception e) {
 										e.printStackTrace();
@@ -258,7 +258,7 @@ public class EditInfo extends JFrame {
 								public void run() {
 									try {
 										dispose();
-										ManagerHome window = new ManagerHome(username.getText());
+										ManagerHome window = new ManagerHome(emailt);
 										window.setVisible(true);
 									} catch (Exception e) {
 										e.printStackTrace();
