@@ -32,7 +32,7 @@ public class UserHome extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-	String email="mo@";
+	String email = "mo@";
 	static UserHome window;
 
 	/**
@@ -58,8 +58,9 @@ public class UserHome extends JFrame {
 	public UserHome() {
 		initialize();
 	}
+
 	public UserHome(String email) {
-		this.email=email;
+		this.email = email;
 		initialize();
 	}
 
@@ -100,13 +101,10 @@ public class UserHome extends JFrame {
 						}
 					}
 				});
-				
-				
-				
-				
+
 			}
 		});
-		
+
 		search = new JButton("Search");
 		initialize_button(search, "Search", 460, 120);
 		search.addActionListener(new ActionListener() {
@@ -118,7 +116,7 @@ public class UserHome extends JFrame {
 					public void run() {
 						try {
 							dispose();
-							SearchBook window = new SearchBook(false,email);
+							SearchBook window = new SearchBook(email);
 							window.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -127,7 +125,7 @@ public class UserHome extends JFrame {
 				});
 			}
 		});
-		
+
 		add = new JButton("Add/delete from cart");
 		initialize_button(add, "Add/delete from cart", 200, 180);
 		add.addActionListener(new ActionListener() {
@@ -148,7 +146,7 @@ public class UserHome extends JFrame {
 				});
 			}
 		});
-		
+
 		view = new JButton("View cart");
 		initialize_button(view, "View cart", 460, 180);
 		view.addActionListener(new ActionListener() {
@@ -169,22 +167,20 @@ public class UserHome extends JFrame {
 				});
 			}
 		});
-		
 
-		
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {			
+			public void actionPerformed(ActionEvent arg0) {
 				Excuter ex;
 				try {
 					ex = new Excuter(Connector.getInstance());
-					Condition emailc=new Condition("email","=","\""+email+"\"");
+					Condition emailc = new Condition("email", "=", "\"" + email + "\"");
 					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
-					boolean rs = ex.delete("cart",conditions,true);
+					boolean rs = ex.delete("cart", conditions, true);
 				} catch (SQLException | ClassNotFoundException e1) {
-					int pane = JOptionPane.showConfirmDialog(window,
-			                 "error in connection", "ERROR",JOptionPane.DEFAULT_OPTION);
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
 					e1.printStackTrace();
 				}
 				EventQueue.invokeLater(new Runnable() {
@@ -199,7 +195,7 @@ public class UserHome extends JFrame {
 						}
 					}
 				});
-				
+
 			}
 		});
 
