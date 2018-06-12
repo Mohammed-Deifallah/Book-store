@@ -160,7 +160,7 @@ public class UserHome extends JFrame {
 					public void run() {
 						try {
 							dispose();
-							ViewCart window = new ViewCart();
+							ViewCart window = new ViewCart(email);
 							window.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();

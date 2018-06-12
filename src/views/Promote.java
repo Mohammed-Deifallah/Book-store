@@ -11,13 +11,23 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import controller.Assignment;
+import controller.Condition;
+import controller.Connector;
+import controller.Excuter;
 
 public class Promote extends JFrame {
 
@@ -30,7 +40,8 @@ public class Promote extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-
+	String emailt="a@b";
+	static Promote window;
 	/**
 	 * Launch the application.
 	 */
@@ -39,7 +50,7 @@ public class Promote extends JFrame {
 			@Override
 			public void run() {
 				try {
-					Promote window = new Promote();
+					window = new Promote();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,6 +63,10 @@ public class Promote extends JFrame {
 	 * Create the application.
 	 */
 	public Promote() {
+		initialize();
+	}
+	public Promote(String email) {
+		emailt=email;
 		initialize();
 	}
 
@@ -86,16 +101,100 @@ public class Promote extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				ResultSet rs;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+					ArrayList<Condition> conditions = new ArrayList<>();
+					if (email.getText().compareTo("Email") != 0) {
+						Condition c = new Condition("email", "=", "\"" + email.getText() + "\"");
+						conditions.add(c);
+						if (username.getText().compareTo("Username") != 0) {
+							Condition c2 = new Condition("username", "=", "\"" + username.getText() + "\"");
+							conditions.add(c2);
+
+						}
+						rs = ex.selectConditional("user", colNames, conditions, true, 0);
+						if (rs.next() == false) {
+							int pane = JOptionPane.showConfirmDialog(window, "no such user found", "ERROR",
+									JOptionPane.DEFAULT_OPTION);
+							return;
+						}
+						ArrayList<Assignment> ass= new ArrayList<Assignment>();
+						ass.add(new Assignment("privilege","\""+1+"\""));
+						ex.update("user",ass,conditions,true);
+						int pane = JOptionPane.showConfirmDialog(window, "promote is done", "OK",
+								JOptionPane.DEFAULT_OPTION);
+
+					} else {
+						int pane = JOptionPane.showConfirmDialog(window, "email is not set", "ERROR",
+								JOptionPane.DEFAULT_OPTION);
+						return;
+					}
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
 
 			}
+
 		});
 
 		cancel = new JButton("Cancel");
 		initialize_button(cancel, "Cancel", 460, 200);
 		cancel.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Connector conn;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("email", "privilege"));
+					Condition emailc = new Condition("email", "=", "\"" + emailt + "\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					ResultSet rs = ex.selectConditional("user", colNames, conditions, true, 0);
+					rs.next();
+					if (rs.getInt("privilege") == 0) {
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									dispose();
+									UserHome window = new UserHome(emailt);
+									window.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+					} else {
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									dispose();
+									ManagerHome window = new ManagerHome(emailt);
+									window.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+					}
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
 
 			}
 		});
@@ -103,10 +202,33 @@ public class Promote extends JFrame {
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {			
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					Condition emailc=new Condition("email","=","\""+emailt+"\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					boolean rs = ex.delete("cart",conditions,true);
+				} catch (SQLException | ClassNotFoundException e1) {
+					int pane = JOptionPane.showConfirmDialog(window,
+			                 "error in connection", "ERROR",JOptionPane.DEFAULT_OPTION);
+					e1.printStackTrace();
+				}
+				EventQueue.invokeLater(new Runnable() {
+					
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
+					
+					public void run() {
+						try {
+							dispose();
+							SignInForm window = new SignInForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
 			}
 		});
 

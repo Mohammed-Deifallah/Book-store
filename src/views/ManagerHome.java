@@ -7,11 +7,19 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import controller.Condition;
+import controller.Connector;
+import controller.Excuter;
 
 public class ManagerHome extends JFrame {
 
@@ -23,7 +31,7 @@ public class ManagerHome extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-	String email;
+	String email="a@b";
 	static ManagerHome window;
 	/**
 	 * Launch the application.
@@ -150,7 +158,7 @@ public class ManagerHome extends JFrame {
 					public void run() {
 						try {
 							dispose();
-							ViewCart window = new ViewCart();
+							ViewCart window = new ViewCart(email);
 							window.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -197,7 +205,17 @@ public class ManagerHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Promote window = new Promote(email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 
@@ -207,17 +225,48 @@ public class ManagerHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							ReportMenu window = new ReportMenu(email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
+			public void actionPerformed(ActionEvent arg0) {			
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					Condition emailc=new Condition("email","=","\""+email+"\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					boolean rs = ex.delete("cart",conditions,true);
+				} catch (SQLException | ClassNotFoundException e1) {
+					int pane = JOptionPane.showConfirmDialog(window,
+			                 "error in connection", "ERROR",JOptionPane.DEFAULT_OPTION);
+					e1.printStackTrace();
+				}
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							SignInForm window = new SignInForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
 			}
 		});
 

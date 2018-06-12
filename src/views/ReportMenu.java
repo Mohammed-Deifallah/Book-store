@@ -23,7 +23,8 @@ public class ReportMenu extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-
+	static ReportMenu window;
+	String email="mo@";
 	/**
 	 * Launch the application.
 	 */
@@ -32,7 +33,7 @@ public class ReportMenu extends JFrame {
 			@Override
 			public void run() {
 				try {
-					ReportMenu window = new ReportMenu();
+					window = new ReportMenu();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,6 +46,10 @@ public class ReportMenu extends JFrame {
 	 * Create the application.
 	 */
 	public ReportMenu() {
+		initialize();
+	}
+	public ReportMenu(String email) {
+		this.email=email;
 		initialize();
 	}
 
