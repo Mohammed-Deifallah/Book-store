@@ -103,7 +103,42 @@ public class Order extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				if(isbn.getText().compareTo("ISBN")==0){
+					int pane = JOptionPane.showConfirmDialog(window, "you should enter ISBN", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					return;
+				}
+				if(quantity.getText().compareTo("Quantity")==0||!java.util.regex.Pattern.matches("\\d+", quantity.getText())){
+					int pane = JOptionPane.showConfirmDialog(window, "you should enter quantity postive int", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					return;
+				}
+				ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+				ArrayList<Condition> conditions = new ArrayList<>();
+				Condition c = new Condition("ISBN", "=", "\"" + isbn.getText() + "\"");
+				conditions.add(c);
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ResultSet rs = ex.selectConditional("book", colNames, conditions, true, 0);
+					if(rs.next()){
+						ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN","amount"));
+						ArrayList<String> values = new ArrayList<>(Arrays.asList("\""+isbn.getText()+"\"" ,quantity.getText()));
+						ex.insert("orders", colNames2, values);
+					}else{
+						int pane = JOptionPane.showConfirmDialog(window, "no such book found", "ERROR",
+								JOptionPane.DEFAULT_OPTION);
+					}
+					
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
+				
+				
 			}
 		});
 
