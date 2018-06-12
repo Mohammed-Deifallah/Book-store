@@ -52,7 +52,7 @@ public class SearchBook extends JFrame {
 	private final String options[] = { "ISBN", "Title", "Category", "Author", "Publisher" };
 	private static Container content;
 	static SearchBook window;
-	String email = "mo@";
+	String email = "a@b1.com";
 	int offset;
 	ResultSet rs;
 
@@ -162,7 +162,8 @@ public class SearchBook extends JFrame {
 						}
 						
 
-						 TableModel model= results.getModel();
+						DefaultTableModel model = new DefaultTableModel( new String[]
+								{"ISBN", "Title", "Publisher", "Category","Year","Price"}, 0);
 						while (rs.next()) {
 							String d = rs.getString("ISBN");
 							String e = rs.getString("title");
@@ -171,7 +172,8 @@ public class SearchBook extends JFrame {
 							String r = rs.getString("pyear");
 							String s = rs.getString("price");
 							String t = rs.getString("quantity");
-							((DefaultTableModel) model).addRow(new Object[] { d, e, f, q,r,s,t });
+							System.out.println(t);
+							( model).addRow(new Object[] { d, e, f, q,r,s,t });
 						}
 						results.setModel(model);
 						
@@ -231,7 +233,8 @@ public class SearchBook extends JFrame {
 						}
 						
 
-						 TableModel model= results.getModel();
+						DefaultTableModel model = new DefaultTableModel( new String[]
+								{"ISBN", "Title", "Publisher", "Category","Year","Price"}, 0);
 						while (rs.next()) {
 							String d = rs.getString("ISBN");
 							String e = rs.getString("title");
@@ -303,7 +306,8 @@ public class SearchBook extends JFrame {
 						}
 						
 
-						 TableModel model= results.getModel();
+						DefaultTableModel model = new DefaultTableModel( new String[]
+								{"ISBN", "Title", "Publisher", "Category","Year","Price"}, 0);
 						while (rs.next()) {
 							String d = rs.getString("ISBN");
 							String e = rs.getString("title");

@@ -147,7 +147,8 @@ public class ViewCart extends JFrame {
 		next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				 TableModel model= cart.getModel();
+				DefaultTableModel model = new DefaultTableModel( new String[]
+						{ "ISBN", "Title","quantity", "Price" }, 0);
 				 
 				 offset+=10;
 				 Excuter ex;
@@ -161,7 +162,7 @@ public class ViewCart extends JFrame {
 							conditions.add(c4);
 							Condition c5 = new Condition("book.ISBN", "=", "quantity_table.ISBN");
 							conditions.add(c5);
-						 ResultSet rs=ex.selectConditional("book,cart,quantity_table ",colNames,conditions,true,0);
+						 ResultSet rs=ex.selectConditional("book,cart,quantity_table ",colNames,conditions,true,offset);
 						while (rs.next()) {
 							String d = rs.getString("ISBN");
 							String e = rs.getString("title");
@@ -189,7 +190,8 @@ public class ViewCart extends JFrame {
 		prev.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				 TableModel model= cart.getModel();
+				DefaultTableModel model = new DefaultTableModel( new String[]
+						{ "ISBN", "Title","quantity", "Price" }, 0);
 				 
 				 offset-=10;
 				 if(offset<10)
@@ -205,7 +207,7 @@ public class ViewCart extends JFrame {
 							conditions.add(c4);
 							Condition c5 = new Condition("book.ISBN", "=", "quantity_table.ISBN");
 							conditions.add(c5);
-						 ResultSet rs=ex.selectConditional("book,cart,quantity_table ",colNames,conditions,true,0);
+						 ResultSet rs=ex.selectConditional("book,cart,quantity_table ",colNames,conditions,true,offset);
 						while (rs.next()) {
 							String d = rs.getString("ISBN");
 							String e = rs.getString("title");
@@ -266,7 +268,8 @@ public class ViewCart extends JFrame {
 		
 		
 		
-		 TableModel model= cart.getModel();
+		DefaultTableModel model = new DefaultTableModel( new String[]
+				{ "ISBN", "Title","quantity", "Price" }, 0);
 		 
 		 offset=0;
 		 Excuter ex;
