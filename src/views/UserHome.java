@@ -116,7 +116,7 @@ public class UserHome extends JFrame {
 					public void run() {
 						try {
 							dispose();
-							SearchBook window = new SearchBook(email);
+							SearchBookUser window = new SearchBookUser(email);
 							window.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();

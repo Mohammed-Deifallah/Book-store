@@ -117,7 +117,7 @@ public class ManagerHome extends JFrame {
 					public void run() {
 						try {
 							dispose();
-							SearchBook window = new SearchBook(email);
+							SearchBookManager window = new SearchBookManager(email);
 							window.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();

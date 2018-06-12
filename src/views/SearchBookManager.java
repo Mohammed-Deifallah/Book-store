@@ -38,7 +38,7 @@ import controller.Condition;
 import controller.Connector;
 import controller.Excuter;
 
-public class SearchBook extends JFrame {
+public class SearchBookManager extends JFrame {
 
 	/**
 	 * 
@@ -53,7 +53,7 @@ public class SearchBook extends JFrame {
 	private JComboBox<String> list;
 	private final String options[] = { "ISBN", "Title", "Category", "Author", "Publisher" };
 	private static Container content;
-	static SearchBook window;
+	static SearchBookManager window;
 	String email = "a@b1.com";
 	int offset;
 	ResultSet rs;
@@ -66,7 +66,7 @@ public class SearchBook extends JFrame {
 			@Override
 			public void run() {
 				try {
-					window = new SearchBook();
+					window = new SearchBookManager();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -78,11 +78,11 @@ public class SearchBook extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public SearchBook() {
+	public SearchBookManager() {
 		initialize();
 	}
 
-	public SearchBook(String email) {
+	public SearchBookManager(String email) {
 		this.email = email;
 		initialize();
 	}
