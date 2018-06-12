@@ -326,7 +326,7 @@ public class ViewCart extends JFrame {
 							
 							ResultSet rs=ex.selectConditional(" cart  JOIN quantity_table on cart.ISBN=quantity_table.ISBN ",colNames,conditions,true,0);
 							rs.next();
-						 int pane = JOptionPane.showConfirmDialog(window," total price is  :  " +rs.getInt(1) , "total price",
+						 int pane = JOptionPane.showConfirmDialog(window," total price is  :  " +rs.getFloat(1) , "total price",
 									JOptionPane.DEFAULT_OPTION);
 						
 						

@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import controller.Assignment;
 import controller.Condition;
 import controller.Connector;
 import controller.Excuter;
@@ -34,12 +35,12 @@ public class Order extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton submit, cancel, logout;
+	private JButton submit, cancel, logout,confirm;
 	private JTextField isbn, title, quantity, publisher;
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
-	String email="mo@";
+	String email = "mo@";
 	static Order window;
 
 	/**
@@ -65,8 +66,9 @@ public class Order extends JFrame {
 	public Order() {
 		initialize();
 	}
+
 	public Order(String email) {
-		this.email=email;
+		this.email = email;
 		initialize();
 	}
 
@@ -92,23 +94,22 @@ public class Order extends JFrame {
 		isbn = new JTextField("ISBN");
 		initialize_text_field(isbn, "ISBN", 140, 120);
 
-	
 		quantity = new JTextField("Quantity");
 		initialize_text_field(quantity, "Quantity", 140, 180);
 
-	
 		submit = new JButton("Submit");
 		initialize_button(submit, "Submit", 290, 240);
 		submit.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(isbn.getText().compareTo("ISBN")==0){
+				if (isbn.getText().compareTo("ISBN") == 0) {
 					int pane = JOptionPane.showConfirmDialog(window, "you should enter ISBN", "ERROR",
 							JOptionPane.DEFAULT_OPTION);
 					return;
 				}
-				if(quantity.getText().compareTo("Quantity")==0||!java.util.regex.Pattern.matches("\\d+", quantity.getText())){
+				if (quantity.getText().compareTo("Quantity") == 0
+						|| !java.util.regex.Pattern.matches("\\d+", quantity.getText())) {
 					int pane = JOptionPane.showConfirmDialog(window, "you should enter quantity postive int", "ERROR",
 							JOptionPane.DEFAULT_OPTION);
 					return;
@@ -121,15 +122,25 @@ public class Order extends JFrame {
 				try {
 					ex = new Excuter(Connector.getInstance());
 					ResultSet rs = ex.selectConditional("book", colNames, conditions, true, 0);
-					if(rs.next()){
-						ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN","amount"));
-						ArrayList<String> values = new ArrayList<>(Arrays.asList("\""+isbn.getText()+"\"" ,quantity.getText()));
-						ex.insert("orders", colNames2, values);
-					}else{
+					if (rs.next()) {
+						ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN", "amount"));
+						ArrayList<String> values = new ArrayList<>(
+								Arrays.asList("\"" + isbn.getText() + "\"", quantity.getText()));
+						rs = ex.selectConditional("orders", colNames, conditions, true, 0);
+						if (!rs.next()) {
+							ex.insert("orders", colNames2, values);
+						} else {
+							ArrayList<Assignment> ass = new ArrayList<Assignment>();
+							ass.add(new Assignment("amount", "amount+" + quantity.getText()));
+							ex.update("orders", ass, conditions, true);
+
+						}
+						int pane = JOptionPane.showConfirmDialog(window, "submitted", "Ok", JOptionPane.DEFAULT_OPTION);
+					} else {
 						int pane = JOptionPane.showConfirmDialog(window, "no such book found", "ERROR",
 								JOptionPane.DEFAULT_OPTION);
 					}
-					
+
 				} catch (SQLException | ClassNotFoundException e) {
 					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
 							JOptionPane.DEFAULT_OPTION);
@@ -137,8 +148,59 @@ public class Order extends JFrame {
 					// WindowEvent.WINDOW_CLOSING));
 					e.printStackTrace();
 				}
+
+			}
+		});
+		
+		
+		confirm = new JButton("confirm");
+		initialize_button(confirm, "confirm", 290, 300);
+		confirm.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (isbn.getText().compareTo("ISBN") == 0) {
+					int pane = JOptionPane.showConfirmDialog(window, "you should enter ISBN", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					return;
+				}
 				
-				
+				ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+				ArrayList<Condition> conditions = new ArrayList<>();
+				Condition c = new Condition("ISBN", "=", "\"" + isbn.getText() + "\"");
+				conditions.add(c);
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ResultSet rs = ex.selectConditional("book", colNames, conditions, true, 0);
+					if (rs.next()) {
+						ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN", "amount"));
+						ArrayList<String> values = new ArrayList<>(
+								Arrays.asList("\"" + isbn.getText() + "\"", quantity.getText()));
+						rs = ex.selectConditional("orders", colNames, conditions, true, 0);
+						if (!rs.next()) {
+							int pane = JOptionPane.showConfirmDialog(window, "no such order found", "ERROR",
+									JOptionPane.DEFAULT_OPTION);
+							return;
+						} else {
+							
+							ex.delete("orders", conditions, true);
+
+						}
+						int pane = JOptionPane.showConfirmDialog(window, "confirm", "Ok", JOptionPane.DEFAULT_OPTION);
+					} else {
+						int pane = JOptionPane.showConfirmDialog(window, "no such book found", "ERROR",
+								JOptionPane.DEFAULT_OPTION);
+					}
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
+
 			}
 		});
 
@@ -195,7 +257,7 @@ public class Order extends JFrame {
 
 			}
 		});
-		
+
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {

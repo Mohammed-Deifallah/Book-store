@@ -175,7 +175,17 @@ public class ManagerHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							NewBook window = new NewBook(email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 
