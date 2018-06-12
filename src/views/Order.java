@@ -11,13 +11,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import controller.Condition;
+import controller.Connector;
+import controller.Excuter;
 
 public class Order extends JFrame {
 
@@ -30,6 +39,8 @@ public class Order extends JFrame {
 	private ImageIcon imgIcon;
 	private JLabel note, image;
 	private static Container content;
+	String email="mo@";
+	static Order window;
 
 	/**
 	 * Launch the application.
@@ -39,7 +50,7 @@ public class Order extends JFrame {
 			@Override
 			public void run() {
 				try {
-					Order window = new Order();
+					window = new Order();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,6 +63,10 @@ public class Order extends JFrame {
 	 * Create the application.
 	 */
 	public Order() {
+		initialize();
+	}
+	public Order(String email) {
+		this.email=email;
 		initialize();
 	}
 
@@ -77,15 +92,11 @@ public class Order extends JFrame {
 		isbn = new JTextField("ISBN");
 		initialize_text_field(isbn, "ISBN", 140, 120);
 
-		title = new JTextField("Title");
-		initialize_text_field(title, "Title", 460, 120);
-
+	
 		quantity = new JTextField("Quantity");
 		initialize_text_field(quantity, "Quantity", 140, 180);
 
-		publisher = new JTextField("Publisher");
-		initialize_text_field(publisher, "Publisher", 460, 180);
-
+	
 		submit = new JButton("Submit");
 		initialize_button(submit, "Submit", 290, 240);
 		submit.addActionListener(new ActionListener() {
@@ -99,9 +110,53 @@ public class Order extends JFrame {
 		cancel = new JButton("Cancel");
 		initialize_button(cancel, "Cancel", 460, 240);
 		cancel.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Connector conn;
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("email", "privilege"));
+					Condition emailc = new Condition("email", "=", "\"" + email + "\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					ResultSet rs = ex.selectConditional("user", colNames, conditions, true, 0);
+					rs.next();
+					if (rs.getInt("privilege") == 0) {
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									dispose();
+									UserHome window = new UserHome(email);
+									window.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+					} else {
+						EventQueue.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									dispose();
+									ManagerHome window = new ManagerHome(email);
+									window.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+
+					}
+
+				} catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
 
 			}
 		});
@@ -109,9 +164,30 @@ public class Order extends JFrame {
 		logout = new JButton("Logout");
 		initialize_button(logout, "Logout", 1000, 10);
 		logout.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					Condition emailc = new Condition("email", "=", "\"" + email + "\"");
+					ArrayList<Condition> conditions = new ArrayList<>(Arrays.asList(emailc));
+					boolean rs = ex.delete("cart", conditions, true);
+				} catch (SQLException | ClassNotFoundException e1) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					e1.printStackTrace();
+				}
+				EventQueue.invokeLater(new Runnable() {
+
+					public void run() {
+						try {
+							dispose();
+							SignInForm window = new SignInForm();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 
 			}
 		});
