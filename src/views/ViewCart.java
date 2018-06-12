@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import controller.Assignment;
 import controller.Condition;
 import controller.Connector;
 import controller.Excuter;
@@ -31,14 +32,14 @@ public class ViewCart extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton back, logout, calc,next,prev;
+	private JButton back, logout, calc,next,prev,buy;
 	private String[] columnNames;
 	private JLabel note, total;
 	private JTable cart;
 	private JScrollPane scroll;
 	private static Container content;
 	static ViewCart window ;
-	String email="mo@";
+	String email="a@b1.com";
 	int offset;
 	/**
 	 * Launch the application.
@@ -142,7 +143,7 @@ public class ViewCart extends JFrame {
 		});
 
 		next = new JButton("next");
-		initialize_button(next, "next", 150, 300);
+		initialize_button(next, "next", 150, 320);
 		
 		next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -225,6 +226,84 @@ public class ViewCart extends JFrame {
 					// WindowEvent.WINDOW_CLOSING));
 					e.printStackTrace();
 				}
+			}
+		});
+		
+		buy = new JButton("buy");
+		initialize_button(buy, "buy", 150, 500);
+		buy.addActionListener(new ActionListener() {
+			@SuppressWarnings("resource")
+			public void actionPerformed(ActionEvent arg0) {
+				
+				try {
+					Excuter ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+					ArrayList<Condition>	conditions = new ArrayList<>();
+					
+					Condition c3 = new Condition("email", "=", "\"" + email + "\"");
+					conditions.add(c3);
+					ResultSet rs = ex.selectConditional("cart", colNames, conditions, true, 0);
+					//rs.next();
+					
+					while(rs.next()){
+						int q=rs.getInt("quantity");
+						String isbn=rs.getString("ISBN");
+						ArrayList<Condition> conditions2 = new ArrayList<>();
+						Condition c4 = new Condition("ISBN", "=", "\"" + isbn + "\"");
+						conditions2.add(c4);
+						
+						rs = ex.selectConditional("quantity_table", colNames, conditions2, true, 0);
+						rs.next();
+						if(q>rs.getInt("quantity")){
+							
+							int pane = JOptionPane.showConfirmDialog(window, "quantity is not enough in store", "ERROR",
+									JOptionPane.DEFAULT_OPTION);
+							Condition emailc = new Condition("email", "=", "\"" + email + "\"");
+							Condition isbnc = new Condition("ISBN", "=", "\"" + isbn + "\"");
+							ArrayList<Condition> conditions3 = new ArrayList<>(Arrays.asList(emailc,isbnc));
+							ex.delete("cart", conditions3, true);
+							rs = ex.selectConditional("cart", colNames, conditions, true, 0);
+							
+							
+						}else{
+							Condition emailc = new Condition("email", "=", "\"" + email + "\"");
+							Condition isbnc = new Condition("ISBN", "=", "\"" + isbn + "\"");
+							ArrayList<Condition> conditions3 = new ArrayList<>(Arrays.asList(emailc,isbnc));
+							ex.delete("cart", conditions3, true);
+							ArrayList<Assignment> ass = new ArrayList<Assignment>();
+							ass.add(new Assignment("quantity", "quantity-"+q));
+							ex.update("quantity_table", ass, conditions2, true);
+							
+							
+							colNames= new ArrayList<>(Arrays.asList("email","ISBN","quantity","sell_date"));
+							
+							java.util.Date dt = new java.util.Date();
+
+							java.text.SimpleDateFormat sdf = 
+							     new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+							String currentTime = sdf.format(dt);
+							ArrayList<String> values= new ArrayList<>(Arrays.asList("\"" + email + "\"","\"" + isbn + "\"",""+q,"\""+currentTime+"\""));
+							ex.insert("log", colNames, values);
+							colNames= new ArrayList<>(Arrays.asList("*"));
+							rs = ex.selectConditional("cart", colNames, conditions, true, 0);
+							
+							
+							
+						}
+						
+						
+						
+					}
+					
+					
+				} catch (ClassNotFoundException |SQLException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					e.printStackTrace();
+				} 
+				 
+				
 			}
 		});
 		
