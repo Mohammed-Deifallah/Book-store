@@ -153,11 +153,15 @@ public class ViewCart extends JFrame {
 				 Excuter ex;
 				try {
 					ex = new Excuter(Connector.getInstance());
-					 ArrayList<String> colNames = new ArrayList<>(Arrays.asList("ISBN","title","cart.quantity","price"));
+					 ArrayList<String> colNames = new ArrayList<>(Arrays.asList("book.ISBN","title","cart.quantity","price"));
 						ArrayList<Condition>	conditions = new ArrayList<>();
 							Condition c3 = new Condition("email", "=", "\"" + email + "\"");
 							conditions.add(c3);
-						 ResultSet rs=ex.selectConditional("book NATURAL JOIN cart  Natural JOIN quantity_table ",colNames,conditions,true,0);
+							Condition c4 = new Condition("book.ISBN", "=", "cart.ISBN");
+							conditions.add(c4);
+							Condition c5 = new Condition("book.ISBN", "=", "quantity_table.ISBN");
+							conditions.add(c5);
+						 ResultSet rs=ex.selectConditional("book,cart,quantity_table ",colNames,conditions,true,0);
 						while (rs.next()) {
 							String d = rs.getString("ISBN");
 							String e = rs.getString("title");
@@ -180,7 +184,7 @@ public class ViewCart extends JFrame {
 		
 		
 		prev = new JButton("prev");
-		initialize_button(prev, "prev", 150, 340);
+		initialize_button(prev, "prev", 150, 380);
 		
 		prev.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -193,11 +197,15 @@ public class ViewCart extends JFrame {
 				 Excuter ex;
 				try {
 					ex = new Excuter(Connector.getInstance());
-					 ArrayList<String> colNames = new ArrayList<>(Arrays.asList("ISBN","title","cart.quantity","price"));
+					 ArrayList<String> colNames = new ArrayList<>(Arrays.asList("book.ISBN","title","cart.quantity","price"));
 						ArrayList<Condition>	conditions = new ArrayList<>();
 							Condition c3 = new Condition("email", "=", "\"" + email + "\"");
 							conditions.add(c3);
-						 ResultSet rs=ex.selectConditional("book NATURAL JOIN cart  Natural JOIN quantity_table ",colNames,conditions,true,0);
+							Condition c4 = new Condition("book.ISBN", "=", "cart.ISBN");
+							conditions.add(c4);
+							Condition c5 = new Condition("book.ISBN", "=", "quantity_table.ISBN");
+							conditions.add(c5);
+						 ResultSet rs=ex.selectConditional("book,cart,quantity_table ",colNames,conditions,true,0);
 						while (rs.next()) {
 							String d = rs.getString("ISBN");
 							String e = rs.getString("title");
@@ -221,7 +229,35 @@ public class ViewCart extends JFrame {
 		
 		calc = new JButton("Calculate Total Price");
 		initialize_button(calc, "Calculate Total Price", 150, 120);
-		
+		calc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+
+				 
+				 Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					 ArrayList<String> colNames = new ArrayList<>(Arrays.asList("sum(price*cart.quantity)"));
+						ArrayList<Condition>	conditions = new ArrayList<>();
+							Condition c3 = new Condition("email", "=", "\"" + email + "\"");
+							conditions.add(c3);
+							//
+							
+							ResultSet rs=ex.selectConditional(" cart  JOIN quantity_table on cart.ISBN=quantity_table.ISBN ",colNames,conditions,true,0);
+							rs.next();
+						 int pane = JOptionPane.showConfirmDialog(window," total price is  :  " +rs.getInt(1) , "total price",
+									JOptionPane.DEFAULT_OPTION);
+						
+						
+				}  catch (SQLException | ClassNotFoundException e) {
+					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
+							JOptionPane.DEFAULT_OPTION);
+					// window.dispatchEvent(new WindowEvent(window,
+					// WindowEvent.WINDOW_CLOSING));
+					e.printStackTrace();
+				}
+			}
+		});
 
 
 
@@ -236,12 +272,16 @@ public class ViewCart extends JFrame {
 		 Excuter ex;
 		try {
 			ex = new Excuter(Connector.getInstance());
-			 ArrayList<String> colNames = new ArrayList<>(Arrays.asList("ISBN","title","cart.quantity","price"));
+			 ArrayList<String> colNames = new ArrayList<>(Arrays.asList("book.ISBN","title","cart.quantity","price"));
 				ArrayList<Condition>	conditions = new ArrayList<>();
 					Condition c3 = new Condition("email", "=", "\"" + email + "\"");
 					conditions.add(c3);
-				 ResultSet rs=ex.selectConditional("book NATURAL JOIN cart  Natural JOIN quantity_table ",colNames,conditions,true,0);
-				while (rs.next()) {
+					Condition c4 = new Condition("book.ISBN", "=", "cart.ISBN");
+					conditions.add(c4);
+					Condition c5 = new Condition("book.ISBN", "=", "quantity_table.ISBN");
+					conditions.add(c5);
+				 ResultSet rs=ex.selectConditional("book,cart,quantity_table ",colNames,conditions,true,0);
+				 while (rs.next()) {
 					String d = rs.getString("ISBN");
 					String e = rs.getString("title");
 					String f = rs.getString("quantity");
