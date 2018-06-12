@@ -140,30 +140,30 @@ public class SearchBook extends JFrame {
 						if(list.getSelectedIndex()==0){
 						Condition c=new Condition("ISBN","=","\""+search.getText()+"\"");
 						conditions.add(c);
-						rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
 						}else if(list.getSelectedIndex()==1){
 							Condition c=new Condition("title"," LIKE ","\'%"+search.getText()+"%\'");
 							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
 						}else if(list.getSelectedIndex()==2){
 							Condition c=new Condition("category"," LIKE ","\'%"+search.getText()+"%\'");
 							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
 						}else if(list.getSelectedIndex()==3){
-							ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN","title","publisher_name","category","price","quantity","pyear"));
+							
 							Condition c=new Condition("author_name"," LIKE ","\'%"+search.getText()+"%\'");
 							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames2,conditions,true,offset);
+							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
 							
 						}else if(list.getSelectedIndex()==4){
 							Condition c=new Condition("publisher_name"," LIKE ","\'%"+search.getText()+"%\'");
 							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
+							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
 						}
 						
 
 						DefaultTableModel model = new DefaultTableModel( new String[]
-								{"ISBN", "Title", "Publisher", "Category","Year","Price","quantity"}, 0);
+								{"ISBN", "Title", "Publisher", "Category","Year","Price","quantity","author"}, 0);
 						while (rs.next()) {
 							String d = rs.getString("ISBN");
 							String e = rs.getString("title");
@@ -172,8 +172,9 @@ public class SearchBook extends JFrame {
 							String r = rs.getString("pyear");
 							String s = rs.getString("price");
 							String t = rs.getString("quantity");
+							String u = rs.getString("author_name");
 							System.out.println(t);
-							( model).addRow(new Object[] { d, e, f, q,r,s,t });
+							( model).addRow(new Object[] { d, e, f, q,r,s,t ,u});
 						}
 						results.setModel(model);
 						
@@ -203,50 +204,51 @@ public class SearchBook extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				offset+=10;
 				
-					Excuter ex;
-					try {
-						ex = new Excuter(Connector.getInstance());
-						ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
-						ArrayList<Condition> conditions = new ArrayList<>();
-						if(list.getSelectedIndex()==0){
-						Condition c=new Condition("ISBN","=","\""+search.getText()+"\"");
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+					ArrayList<Condition> conditions = new ArrayList<>();
+					if(list.getSelectedIndex()==0){
+					Condition c=new Condition("ISBN","=","\""+search.getText()+"\"");
+					conditions.add(c);
+					rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+					}else if(list.getSelectedIndex()==1){
+						Condition c=new Condition("title"," LIKE ","\'%"+search.getText()+"%\'");
 						conditions.add(c);
-						rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
-						}else if(list.getSelectedIndex()==1){
-							Condition c=new Condition("title"," LIKE ","\'%"+search.getText()+"%\'");
-							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
-						}else if(list.getSelectedIndex()==2){
-							Condition c=new Condition("category"," LIKE ","\'%"+search.getText()+"%\'");
-							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
-						}else if(list.getSelectedIndex()==3){
-							ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN","title","publisher_name","category","price","quantity","pyear"));
-							Condition c=new Condition("author_name"," LIKE ","\'%"+search.getText()+"%\'");
-							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames2,conditions,true,offset);
-							
-						}else if(list.getSelectedIndex()==4){
-							Condition c=new Condition("publisher_name"," LIKE ","\'%"+search.getText()+"%\'");
-							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
-						}
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+					}else if(list.getSelectedIndex()==2){
+						Condition c=new Condition("category"," LIKE ","\'%"+search.getText()+"%\'");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+					}else if(list.getSelectedIndex()==3){
 						
+						Condition c=new Condition("author_name"," LIKE ","\'%"+search.getText()+"%\'");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+						
+					}else if(list.getSelectedIndex()==4){
+						Condition c=new Condition("publisher_name"," LIKE ","\'%"+search.getText()+"%\'");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+					}
+					
 
-						DefaultTableModel model = new DefaultTableModel( new String[]
-								{"ISBN", "Title", "Publisher", "Category","Year","Price","quantity"}, 0);
-						while (rs.next()) {
-							String d = rs.getString("ISBN");
-							String e = rs.getString("title");
-							String f = rs.getString("publisher_name");
-							String q = rs.getString("category");
-							String r = rs.getString("pyear");
-							String s = rs.getString("price");
-							String t = rs.getString("quantity");
-							((DefaultTableModel) model).addRow(new Object[] { d, e, f, q,r,s,t });
-						}
-						results.setModel(model);
-						
+					DefaultTableModel model = new DefaultTableModel( new String[]
+							{"ISBN", "Title", "Publisher", "Category","Year","Price","quantity","author"}, 0);
+					while (rs.next()) {
+						String d = rs.getString("ISBN");
+						String e = rs.getString("title");
+						String f = rs.getString("publisher_name");
+						String q = rs.getString("category");
+						String r = rs.getString("pyear");
+						String s = rs.getString("price");
+						String t = rs.getString("quantity");
+						String u = rs.getString("author_name");
+						System.out.println(t);
+						( model).addRow(new Object[] { d, e, f, q,r,s,t ,u});
+					}
+					results.setModel(model);
 						
 					} catch (SQLException | ClassNotFoundException e) {
 						int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
@@ -276,49 +278,51 @@ public class SearchBook extends JFrame {
 				if(offset<0){
 					offset=0;
 				}
-					Excuter ex;
-					try {
-						ex = new Excuter(Connector.getInstance());
-						ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
-						ArrayList<Condition> conditions = new ArrayList<>();
-						if(list.getSelectedIndex()==0){
-						Condition c=new Condition("ISBN","=","\""+search.getText()+"\"");
+				Excuter ex;
+				try {
+					ex = new Excuter(Connector.getInstance());
+					ArrayList<String> colNames = new ArrayList<>(Arrays.asList("*"));
+					ArrayList<Condition> conditions = new ArrayList<>();
+					if(list.getSelectedIndex()==0){
+					Condition c=new Condition("ISBN","=","\""+search.getText()+"\"");
+					conditions.add(c);
+					rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+					}else if(list.getSelectedIndex()==1){
+						Condition c=new Condition("title"," LIKE ","\'%"+search.getText()+"%\'");
 						conditions.add(c);
-						rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
-						}else if(list.getSelectedIndex()==1){
-							Condition c=new Condition("title"," LIKE ","\'%"+search.getText()+"%\'");
-							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
-						}else if(list.getSelectedIndex()==2){
-							Condition c=new Condition("category"," LIKE ","\'%"+search.getText()+"%\'");
-							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
-						}else if(list.getSelectedIndex()==3){
-							ArrayList<String> colNames2 = new ArrayList<>(Arrays.asList("ISBN","title","publisher_name","category","price","quantity","pyear"));
-							Condition c=new Condition("author_name"," LIKE ","\'%"+search.getText()+"%\'");
-							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table natural join author",colNames2,conditions,true,offset);
-							
-						}else if(list.getSelectedIndex()==4){
-							Condition c=new Condition("publisher_name"," LIKE ","\'%"+search.getText()+"%\'");
-							conditions.add(c);
-							rs=ex.selectConditional("book natural join quantity_table",colNames,conditions,true,offset);
-						}
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+					}else if(list.getSelectedIndex()==2){
+						Condition c=new Condition("category"," LIKE ","\'%"+search.getText()+"%\'");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+					}else if(list.getSelectedIndex()==3){
 						
+						Condition c=new Condition("author_name"," LIKE ","\'%"+search.getText()+"%\'");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+						
+					}else if(list.getSelectedIndex()==4){
+						Condition c=new Condition("publisher_name"," LIKE ","\'%"+search.getText()+"%\'");
+						conditions.add(c);
+						rs=ex.selectConditional("book natural join quantity_table natural join author",colNames,conditions,true,offset);
+					}
+					
 
-						DefaultTableModel model = new DefaultTableModel( new String[]
-								{"ISBN", "Title", "Publisher", "Category","Year","Price","quantity"}, 0);
-						while (rs.next()) {
-							String d = rs.getString("ISBN");
-							String e = rs.getString("title");
-							String f = rs.getString("publisher_name");
-							String q = rs.getString("category");
-							String r = rs.getString("pyear");
-							String s = rs.getString("price");
-							String t = rs.getString("quantity");
-							((DefaultTableModel) model).addRow(new Object[] { d, e, f, q,r,s,t });
-						}
-						results.setModel(model);
+					DefaultTableModel model = new DefaultTableModel( new String[]
+							{"ISBN", "Title", "Publisher", "Category","Year","Price","quantity","author"}, 0);
+					while (rs.next()) {
+						String d = rs.getString("ISBN");
+						String e = rs.getString("title");
+						String f = rs.getString("publisher_name");
+						String q = rs.getString("category");
+						String r = rs.getString("pyear");
+						String s = rs.getString("price");
+						String t = rs.getString("quantity");
+						String u = rs.getString("author_name");
+						System.out.println(t);
+						( model).addRow(new Object[] { d, e, f, q,r,s,t ,u});
+					}
+					results.setModel(model);
 						
 						
 					}catch (SQLException | ClassNotFoundException e) {
@@ -396,7 +400,7 @@ public class SearchBook extends JFrame {
 			}
 		});
 
-		columnNames = new String[] { "ISBN", "Title", "Publisher", "Category","Year","Price",  "Quantity"
+		columnNames = new String[] { "ISBN", "Title", "Publisher", "Category","Year","Price",  "Quantity","author"
 				/* "ID", "NAME", "DOB", "ADDRESS" */ };
 		results = new JTable(new Object[][] {}, columnNames);
 		if (!isManager) {

@@ -24,7 +24,7 @@ public class ManagerHome extends JFrame {
 	private JLabel note, image;
 	private static Container content;
 	String email;
-
+	static ManagerHome window;
 	/**
 	 * Launch the application.
 	 */
@@ -33,7 +33,7 @@ public class ManagerHome extends JFrame {
 			@Override
 			public void run() {
 				try {
-					ManagerHome window = new ManagerHome();
+					window = new ManagerHome();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -78,9 +78,25 @@ public class ManagerHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							EditInfo window = new EditInfo(email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+				
+				
+				
 			}
 		});
+		
 
 		search = new JButton("Search");
 		initialize_button(search, "Search", 460, 120);
@@ -88,17 +104,38 @@ public class ManagerHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							SearchBook window = new SearchBook(false,email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
-
-		add = new JButton("Add to cart");
-		initialize_button(add, "Add to cart", 200, 180);
+		add = new JButton("Add/delete from cart");
+		initialize_button(add, "Add/delete from cart", 200, 180);
 		add.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							AddOrRemoveFromCart window = new AddOrRemoveFromCart(email);
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 
@@ -108,19 +145,22 @@ public class ManagerHome extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							dispose();
+							ViewCart window = new ViewCart();
+							window.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 
-		remove = new JButton("Remove from cart");
-		initialize_button(remove, "Remove from cart", 200, 240);
-		remove.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
-			}
-		});
 		addBook = new JButton("Add new book");
 		initialize_button(addBook, "Add new book", 460, 240);
 		addBook.addActionListener(new ActionListener() {
