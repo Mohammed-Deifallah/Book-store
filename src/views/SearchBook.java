@@ -250,9 +250,10 @@ public class SearchBook extends JFrame {
 						String t = rs.getString("quantity");
 						String u = rs.getString("author_name");
 						System.out.println(t);
-						(model).addRow(new Object[] { d, e, f, q, r, s, t, u });
+						(model).addRow(new Object[] { d, e, f, q, r, s, t, u, "Edit/Remove" });
 					}
 					results.setModel(model);
+					new ButtonColumn(results, delete, 8);
 
 				} catch (SQLException | ClassNotFoundException e) {
 					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
@@ -322,9 +323,10 @@ public class SearchBook extends JFrame {
 						String t = rs.getString("quantity");
 						String u = rs.getString("author_name");
 						System.out.println(t);
-						(model).addRow(new Object[] { d, e, f, q, r, s, t, u });
+						(model).addRow(new Object[] { d, e, f, q, r, s, t, u, "Edit/Remove" });
 					}
 					results.setModel(model);
+					new ButtonColumn(results, delete, 8);
 
 				} catch (SQLException | ClassNotFoundException e) {
 					int pane = JOptionPane.showConfirmDialog(window, "error in connection", "ERROR",
@@ -548,7 +550,7 @@ public class SearchBook extends JFrame {
 			JTable table = (JTable) e.getSource();
 			int row = Integer.valueOf(e.getActionCommand());
 			String isbn = table.getModel().getValueAt(row, 0).toString();
-			// System.out.println(isbn);
+			System.out.println(isbn);
 		}
 	};
 }
