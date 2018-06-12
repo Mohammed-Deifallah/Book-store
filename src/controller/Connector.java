@@ -16,7 +16,7 @@ public class Connector {
 	private static Connection getConnection() throws ClassNotFoundException, SQLException {
 		String url = "jdbc:mysql://localhost:3306/book_store";
 		String username = "root";
-		String password = "admin";
+		String password = "root";
 		Connection connection = null;
 		Class.forName("com.mysql.jdbc.Driver");
 		connection = DriverManager.getConnection(url, username, password);

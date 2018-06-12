@@ -28,20 +28,20 @@ public class Jasper {
 		jr = JasperCompileManager.compileReport("TotalSales.jrxml");
 		dataSource = new JRResultSetDataSource(ex.totalSalesBooks());
 		jp = JasperFillManager.fillReport(jr, new HashMap<String, Object>(), dataSource);
-		JasperViewer.viewReport(jp);
+		JasperViewer.viewReport(jp, false);
 	}
 
 	public void printTopCustomers() throws JRException, SQLException {
 		jr = JasperCompileManager.compileReport("TopCustomers.jrxml");
 		dataSource = new JRResultSetDataSource(ex.top5Customers());
 		jp = JasperFillManager.fillReport(jr, new HashMap<String, Object>(), dataSource);
-		JasperViewer.viewReport(jp);
+		JasperViewer.viewReport(jp, false);
 	}
 
 	public void printTopBooks() throws JRException, SQLException {
 		jr = JasperCompileManager.compileReport("TopBooks.jrxml");
 		dataSource = new JRResultSetDataSource(ex.top10Books());
 		jp = JasperFillManager.fillReport(jr, new HashMap<String, Object>(), dataSource);
-		JasperViewer.viewReport(jp);
+		JasperViewer.viewReport(jp, false);
 	}
 }

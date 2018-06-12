@@ -4,7 +4,7 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="ISBN" class="java.lang.String"/>
+	<field name="b.ISBN" class="java.lang.String"/>
 	<field name="title" class="java.lang.String"/>
 	<field name="SUM(l.quantity)" class="java.lang.Integer"/>
 	<background>
@@ -56,7 +56,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ISBN}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{b.ISBN}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="200" y="47" width="100" height="30" uuid="8e1e75d6-1efc-48fa-9e8c-e80684d613be"/>
