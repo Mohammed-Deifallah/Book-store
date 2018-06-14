@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `book_store`.`book` (
     FOREIGN KEY (`publisher_name`)
     REFERENCES `book_store`.`publisher` (`name`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -189,7 +189,7 @@ BEGIN
 				  FROM orders
 				  WHERE orders.ISBN = NEW.ISBN);
 		IF @x = 0 THEN 
-			INSERT INTO orders 
+			INSERT INTO orders(ISBN, amount)
             VALUES (NEW.ISBN, OLD.threshold - NEW.quantity + CEILING(1/2 * OLD.threshold));
         END IF;
     END IF;

@@ -203,7 +203,7 @@ public class RegistrationForm extends JFrame {
 						@Override
 						public void run() {
 							try {
-								window.setVisible(false);
+								dispose();
 								SignInForm window = new SignInForm();
 								window.setVisible(true);
 							} catch (Exception e) {
